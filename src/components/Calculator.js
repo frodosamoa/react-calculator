@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export default class Calculator extends Component {
+class Calculator extends Component {
   render () {
     return (
-      <div>
-        Hello world!
-      </div>
+      <div>Hello world!</div>
     );
   }
 }
+
+export default Calculator;
