@@ -14,7 +14,7 @@ module.exports = {
           /flexboxgrid/,
           /src/
         ],
-        loader: 'style-loader!css-loader?modules'
+        loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]'
       }
     ]
   },
