@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-flexbox-grid": "^2.0.0"
   },
   "scripts": {
     "start": "node server.js"

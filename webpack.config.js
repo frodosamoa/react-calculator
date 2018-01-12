@@ -1,5 +1,6 @@
 module.exports = {
   entry: './src/index.js',
+  devtool: 'sourcemap',
   module: {
     rules: [
       {
@@ -9,6 +10,10 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        include: [
+          /flexboxgrid/,
+          /src/
+        ],
         loader: 'style-loader!css-loader?modules'
       }
     ]
