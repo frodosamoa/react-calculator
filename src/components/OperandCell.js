@@ -7,18 +7,18 @@ import { Col } from 'react-flexbox-grid';
 
 import { typeOperand } from '../actions';
 
-import { fourthRow } from '../utils/grid';
+import { fullRow } from '../utils/grid';
 
-let OperandCell = ({ operand, onTypeOperand, isActive }) => (
+let OperandCell = ({ operand, onTypeOperand, isActive, gridStyle = fullRow }) => (
   <Col
     className={classnames(styles.cell, styles.operandCell, isActive ? styles.isActive : '')}
-    {...fourthRow}
+    {...gridStyle}
     onClick={() => onTypeOperand(operand)}>
     {operand}
   </Col>
 );
 
-OperandCell = connect(
+export default connect(
   (state, ownProps) => ({
     isActive: state.operand === ownProps.operand
   }),
@@ -28,5 +28,3 @@ OperandCell = connect(
     }
   })
 )(OperandCell);
-
-export default OperandCell;
