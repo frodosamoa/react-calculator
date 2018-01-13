@@ -6,12 +6,18 @@ import App from './App';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import calculatorReducer from './reducers/calculatorReducer';
+import reducers from './reducers';
 
 import registerServiceWorker from './registerServiceWorker';
 
+const store = createStore(reducers);
+
+store.subscribe(() => {
+  console.log(store.getState());
+});
+
 ReactDOM.render(
-  <Provider store={createStore(calculatorReducer)}>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root')
