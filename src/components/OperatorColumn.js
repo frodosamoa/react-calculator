@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import styles from './calculator.css';
+import styles from './calculator.scss';
 import { Row, Col } from 'react-flexbox-grid';
 
 import {
@@ -19,23 +19,23 @@ import {
 
 const operators = [
   {
-    display: '÷',
+    operator: '÷',
     actionType: DIVIDE
   },
   {
-    display: 'x',
+    operator: 'x',
     actionType: MULTIPLY
   },
   {
-    display: '–',
+    operator: '–',
     actionType: SUBTRACT
   },
   {
-    display: '+',
+    operator: '+',
     actionType: ADD
   },
   {
-    display: '=',
+    operator: '=',
     actionType: EQUALS
   }
 ];
@@ -44,9 +44,7 @@ const OperatorColumn = () => (
   <Col {...fourthRow}>
     {operators.map((operator) => (
       <Row key={operator.actionType} className={styles.row}>
-        <OperatorCell
-          actionType={operator.actionType}
-          operator={operator.display} />
+        <OperatorCell {...operator} />
       </Row>
     ))}
   </Col>

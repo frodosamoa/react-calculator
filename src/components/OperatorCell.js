@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import styles from './calculator.css';
+import styles from './calculator.scss';
 
 import { Col } from 'react-flexbox-grid';
 
@@ -13,18 +13,18 @@ let operatorCell = ({ operator, onTypeOperator, isActive }) => (
   <Col
     className={classnames(styles.cell, styles.operatorCell, isActive ? styles.isActive : '')}
     {...fullRow}
-    onClick={() => onTypeOperator(operator)}>
+    onClick={() => onTypeOperator()}>
     {operator}
   </Col>
 );
 
 export default connect(
   (state, ownProps) => ({
-    isActive: state.operator === ownProps.operator
+    isActive: state.operator === ownProps.actionType
   }),
-  (dispatch) => ({
-    onTypeOperator: (operator) => {
-      dispatch(typeOperator(operator));
+  (dispatch, ownProps) => ({
+    onTypeOperator: () => {
+      dispatch(typeOperator(ownProps.actionType));
     }
   })
 )(operatorCell);

@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   entry: './src/index.js',
   devtool: 'sourcemap',
@@ -5,16 +7,24 @@ module.exports = {
     rules: [
       {
        test: /\.js$/,
-       exclude: /node_modules/,
-       loader: "babel-loader"
+       loader: 'babel-loader',
+       exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        include: [
-          /flexboxgrid/,
-          /src/
+        loaders: [
+          'style-loader',
+          'css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]'
         ],
-        loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]'
+        include: /flexboxgrid/
+      },
+      {
+        test: /\.scss$/,
+        loaders: [
+            'style-loader',
+            'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+            'sass-loader'
+        ]
       }
     ]
   },
