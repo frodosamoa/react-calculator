@@ -15,7 +15,6 @@ let NumberDisplay = ({ currentInput }) => (
   </Row>
 );
 
-
 export default connect(
   (state) => ({
     currentInput: state.input

@@ -7,8 +7,8 @@ import {
   TYPE_NUMBER
 } from '../constants';
 
-const operandConverter = (operand) => {
-  switch (operand) {
+const operatorConverter = (operator) => {
+  switch (operator) {
     case '+':
       return ADD;
     case '-':
@@ -24,7 +24,7 @@ const operandConverter = (operand) => {
   }
 }
 
-export default function operand (state = null, action) {
+export default function operator (state = null, action) {
   switch (action.type) {
     case ADD:
     case SUBTRACT:

@@ -12,6 +12,6 @@ export const typeNumber = (value) => ({
   value
 });
 
-export const typeOperand = (operand) => ({
-  type: operand
+export const typeOperator = (operator) => ({
+  type: operator
 });
