@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './index.css';
-import App from './App';
+import Calculator from './components/Calculator';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -18,7 +18,7 @@ store.subscribe(() => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Calculator />
   </Provider>,
   document.getElementById('root')
 );

@@ -1,82 +1,66 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
+
 import {
   fullRow,
   halfRow,
   fourthRow
 } from '../utils/grid';
 
-import {
-  typeNumber,
-  clear
-} from '../actions';
+import { clear } from '../actions';
 
-let NumberCell = ({ number, onTypeNumber }) => (
-  <Col {...fourthRow} onClick={() => onTypeNumber(number)}>
-    {number}
-  </Col>
-);
+import styles from './calculator.css'
 
-NumberCell = connect(
-  null,
-  (dispatch) => ({
-    onTypeNumber: (value) => {
-      dispatch(typeNumber(value));
-    }
-  })
-)(NumberCell);
+import NumberDisplay from './NumberDisplay';
+import NumberCell from './NumberCell';
+import OperandCell from './OperandCell';
+
 
 const Calculator = ({
-  currentComputation,
+  currentInput,
   onClear
 }) => (
-  <Grid fluid>
-    <Row>
-      <Col {...fullRow}>
-        {currentComputation}
-      </Col>
-    </Row>
-    <Row>
-      <Col {...fourthRow} onClick={() => {
+  <Grid fluid style={{paddingLeft: 8, paddingRight: 8}}>
+    <NumberDisplay />
+    <Row className={styles.row}>
+      <Col {...fourthRow} className={classnames(styles.cell, styles.clearCell)} onClick={() => {
           onClear();
         }}>
           C
       </Col>
-      <Col {...fourthRow}>+/-</Col>
-      <Col {...fourthRow}>%</Col>
-      <Col {...fourthRow}>/</Col>
+      <Col {...halfRow} className={classnames(styles.cell, styles.clearCell)}>admin</Col>
+      <OperandCell operand={'/'} />
     </Row>
-    <Row>
+    <Row className={styles.row}>
       <NumberCell number={7} />
       <NumberCell number={8} />
       <NumberCell number={9} />
-      <Col {...fourthRow}>x</Col>
+      <OperandCell operand={'x'} />
     </Row>
-    <Row>
+    <Row className={styles.row}>
       <NumberCell number={4} />
       <NumberCell number={5} />
       <NumberCell number={6} />
-      <Col {...fourthRow}>-</Col>
+      <OperandCell operand={'-'} />
     </Row>
-    <Row>
+    <Row className={styles.row}>
       <NumberCell number={1} />
       <NumberCell number={2} />
       <NumberCell number={3} />
-      <Col {...fourthRow}>+</Col>
+      <OperandCell operand={'+'} />
     </Row>
-    <Row>
-      <Col {...halfRow}>0</Col>
-      <Col {...fourthRow}>.</Col>
-      <Col {...fourthRow}>=</Col>
+    <Row className={styles.row}>
+      <NumberCell number={0} gridStyle={halfRow} />
+      <NumberCell number={'.'} gridStyle={fourthRow} />
+      <OperandCell operand={'='} />
     </Row>
   </Grid>
 );
 
 export default connect(
-  (state) => ({
-    currentComputation: state.computations[state.computations.length - 1]
-  }),
+  null,
   (dispatch) => ({
     onClear: () => {
       dispatch(clear());
