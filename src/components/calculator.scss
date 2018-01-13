@@ -1,3 +1,9 @@
+$number-display-color: #202020;
+$number-cell-color: #CFD0D3;
+$admin-cell-color: #C1C3C5;
+$operator-cell-color: #F78128;
+
+
 .row {
   height: 16.3vh;
 }
@@ -18,20 +24,20 @@
 }
 
 .clearCell {
-  background: #C1C3C5;
+  background: $admin-cell-color; 
 }
 
 .numberCell {
-  background: #CFD0D3;
+  background: $number-cell-color;
 }
 
 .operatorCell {
-  background: #F78128;
+  background: $operator-cell-color;
   color: white;
 }
 
 .numberDisplay {
   text-align: right;
-  background: #202020;
+  background: $number-display-color;
   color: white;
 }

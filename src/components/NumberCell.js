@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import styles from './calculator.css';
+import styles from './calculator.scss';
 
 import { Col } from 'react-flexbox-grid';
 
