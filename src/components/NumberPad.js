@@ -14,6 +14,8 @@ import {
 
 import NumberCell from './NumberCell';
 
+const numberPad = [[7, 8, 9], [4, 5, 6], [1, 2, 3]];
+
 const NumberPad = () => (
   <Col {...threeFourthsRow}>
     <Row className={styles.row}>
@@ -26,21 +28,13 @@ const NumberPad = () => (
         admin
       </Col>
     </Row>
-    <Row className={styles.row}>
-      <NumberCell number={7} />
-      <NumberCell number={8} />
-      <NumberCell number={9} />
-    </Row>
-    <Row className={styles.row}>
-      <NumberCell number={4} />
-      <NumberCell number={5} />
-      <NumberCell number={6} />
-    </Row>
-    <Row className={styles.row}>
-      <NumberCell number={1} />
-      <NumberCell number={2} />
-      <NumberCell number={3} />
-    </Row>
+    {numberPad.map((row, index) => (
+      <Row key={index} className={styles.row}>
+        {row.map((number) => (
+          <NumberCell key={number} number={number} />
+        ))}
+      </Row>
+    ))}
     <Row className={styles.row}>
       <NumberCell number={0} gridStyle={twoThirdsRow} />
       <NumberCell number={'.'} gridStyle={thirdRow} />
