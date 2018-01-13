@@ -7,9 +7,9 @@ import { Col } from 'react-flexbox-grid';
 
 import { typeNumber } from '../actions';
 
-import { fourthRow } from '../utils/grid';
+import { thirdRow } from '../utils/grid';
 
-let NumberCell = ({ number, onTypeNumber, gridStyle = fourthRow }) => (
+let NumberCell = ({ number, onTypeNumber, gridStyle = thirdRow }) => (
   <Col
     className={classnames(styles.cell, styles.numberCell)} 
     {...gridStyle}
@@ -18,7 +18,7 @@ let NumberCell = ({ number, onTypeNumber, gridStyle = fourthRow }) => (
   </Col>
 );
 
-NumberCell = connect(
+export default connect(
   null,
   (dispatch) => ({
     onTypeNumber: (value) => {
@@ -26,5 +26,3 @@ NumberCell = connect(
     }
   })
 )(NumberCell);
-
-export default NumberCell;
