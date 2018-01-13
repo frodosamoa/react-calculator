@@ -10,4 +10,8 @@ export const clear = () => ({
 export const typeNumber = (value) => ({
   type: TYPE_NUMBER,
   value
-})
+});
+
+export const typeOperand = (operand) => ({
+  type: operand
+});

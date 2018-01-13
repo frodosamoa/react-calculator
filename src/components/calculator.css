@@ -1,0 +1,37 @@
+.row {
+  height: 16.3vh;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8vh;
+
+  border-width: thin 0 0 thin;
+  border-color: black;
+  border-style: solid;
+}
+
+.isActive {
+  border-width: medium 0 0 medium;
+}
+
+.clearCell {
+  background: #C1C3C5;
+}
+
+.numberCell {
+  background: #CFD0D3;
+}
+
+.operandCell {
+  background: #F78128;
+  color: white;
+}
+
+.numberDisplay {
+  text-align: right;
+  background: #202020;
+  color: white;
+}

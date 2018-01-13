@@ -2,19 +2,38 @@ import {
   ADD,
   SUBTRACT,
   MULTIPLY,
-  DIVIDE
+  DIVIDE,
+  EQUALS,
+  TYPE_NUMBER
 } from '../constants';
 
-export function operand (state, action) {
+const operandConverter = (operand) => {
+  switch (operand) {
+    case '+':
+      return ADD;
+    case '-':
+      return SUBTRACT;
+    case 'x':
+      return MULTIPLY;
+    case '/':
+      return DIVIDE;
+    case '=':
+      return EQUALS;
+    default:
+      return null;
+  }
+}
+
+export default function operand (state = null, action) {
   switch (action.type) {
     case ADD:
-      return state + action.nextComputation;
     case SUBTRACT:
-      return state - action.nextComputation;
     case MULTIPLY:
-      return state * action.nextComputation;
     case DIVIDE:
-      return state / action.nextComputation;
+      return operandConverter(action.type);
+    case EQUALS:
+    case TYPE_NUMBER:
+      return null;
     default:
       return state;
   }
