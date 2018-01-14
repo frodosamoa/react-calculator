@@ -7,19 +7,22 @@ import {
   DIVIDE,
   EQUALS,
   TO_FIXED
-} from '../constants';
+} from '../actions/actionTypes';
 
 import { createSelector } from 'reselect';
 
-const initialState = {
+import { operators } from '../constants';
+
+export const initialState = {
   previousInput: null,
   currentInput: 0,
   operator: null,
   computations: []
 };
 
-const currentInputSelector = state => state.input.currentInput;
-const computationsSelector = state => state.input.computations;
+const currentInputSelector = state => state.currentInput;
+const computationsSelector = state => state.computations;
+const operatorSelector = state => state.operator;
 
 export const getNumberDisplay = createSelector(
   currentInputSelector,
@@ -33,6 +36,14 @@ export const getNumberDisplay = createSelector(
   }
 );
 
+export const getOperatorDisplay = createSelector(
+  operatorSelector,
+  (operator) => {
+      const opDisplay = operators.find((op) => op.actionType === operator);
+
+      return (opDisplay && opDisplay.operator) || '';
+  }
+);
 
 const compute = (operator, previousInput, currentInput) => {
   switch (operator) {
@@ -53,13 +64,20 @@ export default function input (state = initialState, action) {
     case SUBTRACT:
     case MULTIPLY:
     case DIVIDE:
-      if (state.previousInput === null) {
+      if (state.previousInput === null && state.currentInput === null) {
+        return {
+          ...state,
+          operator: action.type,
+          previousInput: state.computations[state.computations.length - 1],
+        };
+      } else if (state.previousInput === null && state.currentInput !== null) {
         return {
           ...state,
           operator: action.type
         };
       } else if (state.previousInput && state.currentInput) {
         return {
+          ...state,
           operator: action.type,
           previousInput: null,
           currentInput: compute(state.operator, state.previousInput, state.currentInput)
@@ -85,18 +103,11 @@ export default function input (state = initialState, action) {
         }
       }
     case TYPE_NUMBER:
-      if (state.operator) {
-        if (state.previousInput === null) {
-          return {
-            ...state,
-            previousInput: state.currentInput,
-            currentInput: action.value
-          }
-        } else {
-          return {
-            ...state,
-            currentInput: (state.currentInput * 10) + action.value
-          }
+      if (state.operator && state.previousInput === null) {
+        return {
+          ...state,
+          previousInput: state.currentInput,
+          currentInput: action.value
         }
       }
 
@@ -105,10 +116,8 @@ export default function input (state = initialState, action) {
         currentInput: (state.currentInput * 10) + action.value
       }
     case TO_FIXED:
-
       return {
-        ...state,
-        currentInput
+        ...state
       }
     case CLEAR:
       return {

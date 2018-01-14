@@ -5,20 +5,32 @@ import styles from './calculator.scss';
 
 import { Row, Col } from 'react-flexbox-grid';
 
-import { fullRow } from '../utils/grid';
+import {
+  threeFourthsRow,
+  fourthRow
+} from '../utils/grid';
 
-import { getNumberDisplay } from '../reducers/input';
+import {
+  getNumberDisplay,
+  getOperatorDisplay
+} from '../reducers/calculator';
 
-let NumberDisplay = ({ currentInput }) => (
+import { operators } from '../constants';
+
+let NumberDisplay = ({ operator, numberDisplay }) => (
   <Row className={styles.row}>
-    <Col {...fullRow} className={classnames(styles.numberDisplay)}>
-      {currentInput}
+    <Col {...fourthRow} className={classnames(styles.numberDisplay)}>
+      {operator}
+    </Col>
+    <Col {...threeFourthsRow} className={classnames(styles.numberDisplay)}>
+      {numberDisplay}
     </Col>
   </Row>
 );
 
 export default connect(
   (state) => ({
-    currentInput: getNumberDisplay(state)
+    numberDisplay: getNumberDisplay(state),
+    operator: getOperatorDisplay(state)
   })
 )(NumberDisplay);

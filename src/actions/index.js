@@ -2,7 +2,7 @@ import {
   CLEAR,
   TYPE_NUMBER,
   TO_FIXED
-} from './constants';
+} from './actionTypes';
 
 export const clear = () => ({
   type: CLEAR
