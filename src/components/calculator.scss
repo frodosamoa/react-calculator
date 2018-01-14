@@ -1,43 +1,52 @@
 $number-display-color: #202020;
 $number-cell-color: #CFD0D3;
-$admin-cell-color: #C1C3C5;
+$admin-cell-color: #B1B3B5;
 $operator-cell-color: #F78128;
 
 
-.row {
-  height: 16.3vh;
-}
-
-.cell {
+@mixin calculatorCell($color, $align: center) {
   display: flex;
-  justify-content: center;
+  background: $color;
+  justify-content: $align;
   align-items: center;
+
   font-size: 8vh;
 
   border-width: thin 0 0 thin;
   border-color: black;
   border-style: solid;
+
+  &.active {
+    background-color: darken($color, 8%);
+  }
 }
 
-.isActive {
-  border-width: medium 0 0 medium;
+.row {
+  height: 16.3vh;
+
+  &:last-child {
+    border-width: 0 0 thin 0;
+    border-color: black;
+    border-style: solid;
+  }
 }
 
 .clearCell {
-  background: $admin-cell-color; 
+  @include calculatorCell($admin-cell-color);
 }
 
 .numberCell {
-  background: $number-cell-color;
+  @include calculatorCell($number-cell-color);
 }
 
 .operatorCell {
-  background: $operator-cell-color;
+  @include calculatorCell($operator-cell-color);
+
   color: white;
 }
 
 .numberDisplay {
-  text-align: right;
-  background: $number-display-color;
+  @include calculatorCell($number-display-color, flex-end);
+
   color: white;
 }

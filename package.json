@@ -9,7 +9,8 @@
     "react-dom": "^16.2.0",
     "react-flexbox-grid": "^2.0.0",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "reselect": "^3.0.1"
   },
   "scripts": {
     "start": "node server.js"

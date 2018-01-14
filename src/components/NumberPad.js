@@ -12,19 +12,21 @@ import {
   fourthRow
 } from '../utils/grid';
 
+import { clear } from '../actions';
+
 import NumberCell from './NumberCell';
 
 const numberPad = [[7, 8, 9], [4, 5, 6], [1, 2, 3]];
 
-const NumberPad = () => (
+const NumberPad = ({ onClear, onToFixed }) => (
   <Col {...threeFourthsRow}>
     <Row className={styles.row}>
-      <Col {...thirdRow} className={classnames(styles.cell, styles.clearCell)} onClick={() => {
+      <Col {...thirdRow} className={classnames(styles.clearCell)} onClick={() => {
         onClear();
       }}>
         C
       </Col>
-      <Col {...twoThirdsRow} className={classnames(styles.cell, styles.clearCell)}>
+      <Col {...twoThirdsRow} className={classnames(styles.clearCell)}>
         admin
       </Col>
     </Row>
@@ -37,7 +39,12 @@ const NumberPad = () => (
     ))}
     <Row className={styles.row}>
       <NumberCell number={0} gridStyle={twoThirdsRow} />
-      <NumberCell number={'.'} gridStyle={thirdRow} />
+      <Col
+        className={classnames(styles.numberCell)}
+        {...thirdRow}
+        onClick={() => onToFixed()}>
+        {'.'}
+      </Col>
     </Row>
   </Col>
 );
@@ -47,6 +54,9 @@ export default connect(
   (dispatch) => ({
     onClear: () => {
       dispatch(clear());
+    },
+    onToFixed: () => {
+      dispatch(toFixed());
     }
   })
 )(NumberPad);
