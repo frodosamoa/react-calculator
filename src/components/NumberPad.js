@@ -12,7 +12,7 @@ import {
   fourthRow
 } from '../utils/grid';
 
-import { clear } from '../actions';
+import { clear } from '../actions/index';
 
 import NumberCell from './NumberCell';
 

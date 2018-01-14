@@ -5,13 +5,13 @@ import styles from './calculator.scss';
 
 import { Col } from 'react-flexbox-grid';
 
-import { typeOperator } from '../actions';
+import { typeOperator } from '../actions/index';
 
 import { fullRow } from '../utils/grid';
 
-let operatorCell = ({ operator, onTypeOperator, isActive }) => (
+let operatorCell = ({ operator, onTypeOperator }) => (
   <Col
-    className={classnames(styles.operatorCell, isActive ? styles.active : '')}
+    className={classnames(styles.operatorCell)}
     {...fullRow}
     onClick={() => onTypeOperator()}>
     {operator}
@@ -20,7 +20,7 @@ let operatorCell = ({ operator, onTypeOperator, isActive }) => (
 
 export default connect(
   (state, ownProps) => ({
-    isActive: state.input.operator === ownProps.actionType
+    isActive: state.operator === ownProps.actionType
   }),
   (dispatch, ownProps) => ({
     onTypeOperator: () => {

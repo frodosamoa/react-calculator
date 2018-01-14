@@ -6,11 +6,11 @@ import Calculator from './components/Calculator';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducers from './reducers';
+import reducer from './reducers/calculator';
 
 import registerServiceWorker from './registerServiceWorker';
 
-const store = createStore(reducers);
+const store = createStore(reducer);
 
 store.subscribe(() => {
   console.log(store.getState());

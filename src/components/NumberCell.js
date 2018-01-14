@@ -5,7 +5,7 @@ import styles from './calculator.scss';
 
 import { Col } from 'react-flexbox-grid';
 
-import { typeNumber } from '../actions';
+import { typeNumber } from '../actions/index';
 
 import { thirdRow } from '../utils/grid';
 

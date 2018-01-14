@@ -15,30 +15,9 @@ import {
   DIVIDE,
   MULTIPLY,
   EQUALS
-} from '../constants';
+} from '../actions/actionTypes';
 
-const operators = [
-  {
-    operator: '÷',
-    actionType: DIVIDE
-  },
-  {
-    operator: 'x',
-    actionType: MULTIPLY
-  },
-  {
-    operator: '–',
-    actionType: SUBTRACT
-  },
-  {
-    operator: '+',
-    actionType: ADD
-  },
-  {
-    operator: '=',
-    actionType: EQUALS
-  }
-];
+import { operators } from '../constants';
 
 const OperatorColumn = () => (
   <Col {...fourthRow}>
