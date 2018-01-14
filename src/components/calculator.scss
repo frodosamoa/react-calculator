@@ -16,6 +16,8 @@ $operator-cell-color: #F78128;
   border-color: black;
   border-style: solid;
 
+  user-select: none;
+
   &.active {
     background-color: darken($color, 8%);
   }
