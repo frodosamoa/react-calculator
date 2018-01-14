@@ -11,7 +11,7 @@ import { fullRow } from '../utils/grid';
 
 let operatorCell = ({ operator, onTypeOperator, isActive }) => (
   <Col
-    className={classnames(styles.cell, styles.operatorCell, isActive ? styles.isActive : '')}
+    className={classnames(styles.operatorCell, isActive ? styles.active : '')}
     {...fullRow}
     onClick={() => onTypeOperator()}>
     {operator}
@@ -20,7 +20,7 @@ let operatorCell = ({ operator, onTypeOperator, isActive }) => (
 
 export default connect(
   (state, ownProps) => ({
-    isActive: state.operator === ownProps.actionType
+    isActive: state.input.operator === ownProps.actionType
   }),
   (dispatch, ownProps) => ({
     onTypeOperator: () => {

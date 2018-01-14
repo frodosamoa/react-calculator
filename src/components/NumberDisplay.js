@@ -7,9 +7,11 @@ import { Row, Col } from 'react-flexbox-grid';
 
 import { fullRow } from '../utils/grid';
 
+import { getNumberDisplay } from '../reducers/input';
+
 let NumberDisplay = ({ currentInput }) => (
   <Row className={styles.row}>
-    <Col {...fullRow} className={classnames(styles.cell, styles.numberDisplay)}>
+    <Col {...fullRow} className={classnames(styles.numberDisplay)}>
       {currentInput}
     </Col>
   </Row>
@@ -17,6 +19,6 @@ let NumberDisplay = ({ currentInput }) => (
 
 export default connect(
   (state) => ({
-    currentInput: state.input
+    currentInput: getNumberDisplay(state)
   })
 )(NumberDisplay);

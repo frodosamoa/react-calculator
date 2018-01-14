@@ -1,6 +1,7 @@
 import {
   CLEAR,
-  TYPE_NUMBER
+  TYPE_NUMBER,
+  TO_FIXED
 } from './constants';
 
 export const clear = () => ({
@@ -11,6 +12,10 @@ export const typeNumber = (value) => ({
   type: TYPE_NUMBER,
   value
 });
+
+export const toFixed = () => ({
+  type: TO_FIXED
+})
 
 export const typeOperator = (operator) => ({
   type: operator

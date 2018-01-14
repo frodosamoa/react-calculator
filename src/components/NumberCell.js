@@ -11,7 +11,7 @@ import { thirdRow } from '../utils/grid';
 
 let NumberCell = ({ number, onTypeNumber, gridStyle = thirdRow }) => (
   <Col
-    className={classnames(styles.cell, styles.numberCell)} 
+    className={classnames(styles.numberCell)}
     {...gridStyle}
     onClick={() => onTypeNumber(number)}>
     {number}
