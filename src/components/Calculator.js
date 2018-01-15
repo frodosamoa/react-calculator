@@ -7,7 +7,7 @@ import OperatorColumn from './OperatorColumn';
 import ComputationsModal from './ComputationsModal';
 
 const Calculator = () => (
-  <Grid fluid style={{paddingLeft: 8, paddingRight: 8}}>
+  <Grid fluid style={{ paddingLeft: 8, paddingRight: 8 }}>
     <NumberDisplay />
     <Row>
       <NumberPad />

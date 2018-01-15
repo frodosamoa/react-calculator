@@ -5,35 +5,35 @@ import {
   TYPE_OPERATOR,
   TO_FIXED,
   OPEN_MODAL,
-  CLOSE_MODAL
+  CLOSE_MODAL,
 } from './actionTypes';
 
 export const clear = () => ({
-  type: CLEAR
+  type: CLEAR,
 });
 
 export const equals = () => ({
-  type: EQUALS
+  type: EQUALS,
 });
 
-export const typeNumber = (value) => ({
+export const typeNumber = value => ({
   type: TYPE_NUMBER,
-  value
+  value,
 });
 
 export const toFixed = () => ({
-  type: TO_FIXED
-})
+  type: TO_FIXED,
+});
 
-export const typeOperator = (operator) => ({
+export const typeOperator = operator => ({
   type: TYPE_OPERATOR,
-  operator
+  operator,
 });
 
 export const openModal = () => ({
-  type: OPEN_MODAL
+  type: OPEN_MODAL,
 });
 
 export const closeModal = () => ({
-  type: CLOSE_MODAL
+  type: CLOSE_MODAL,
 });

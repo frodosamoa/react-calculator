@@ -9,20 +9,21 @@ import { typeNumber } from '../actions';
 
 import { flexboxGridColumnWidth } from '../utils/grid';
 
-let NumberCell = ({ number, onTypeNumber, gridStyle = flexboxGridColumnWidth(1/3)}) => (
+const NumberCell = ({ number, onTypeNumber, gridStyle = flexboxGridColumnWidth(1 / 3) }) => (
   <Col
     className={classnames(styles.numberCell)}
     {...gridStyle}
-    onClick={() => onTypeNumber(number)}>
+    onClick={() => onTypeNumber(number)}
+  >
     {number}
   </Col>
 );
 
 export default connect(
   null,
-  (dispatch) => ({
+  dispatch => ({
     onTypeNumber: (value) => {
       dispatch(typeNumber(value));
-    }
-  })
+    },
+  }),
 )(NumberCell);

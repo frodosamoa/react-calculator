@@ -7,28 +7,30 @@ import { closeModal } from '../actions';
 
 const ComputationsModal = ({
   isOpen,
-  onCloseModal
+  onCloseModal,
 }) => (
   <Modal
     ariaHideApp={false}
     isOpen={isOpen}
-    onRequestClose={onCloseModal}>
+    onRequestClose={onCloseModal}
+  >
 
     <button onClick={() => {
       onCloseModal();
-    }}>
+    }}
+    >
       Close me.
     </button>
   </Modal>
 );
 
 export default connect(
-  (state) => ({
-    isOpen: state.modal
+  state => ({
+    isOpen: state.modal,
   }),
-  (dispatch) => ({
+  dispatch => ({
     onCloseModal: () => {
       dispatch(closeModal());
-    }
-  })
+    },
+  }),
 )(ComputationsModal);
