@@ -1,10 +1,7 @@
-import {
-  DIVIDE,
-  MULTIPLY,
-  SUBTRACT,
-  ADD,
-  EQUALS
-} from './actions/actionTypes';
+export const ADD = 'ADD';
+export const SUBTRACT = 'SUBTRACT';
+export const MULTIPLY = 'MULTIPLY';
+export const DIVIDE = 'DIVIDE';
 
 export const operators = [
   {
@@ -22,9 +19,5 @@ export const operators = [
   {
     operator: '+',
     actionType: ADD
-  },
-  {
-    operator: '=',
-    actionType: EQUALS
   }
 ];

@@ -5,10 +5,7 @@ import styles from './calculator.scss';
 
 import { Row, Col } from 'react-flexbox-grid';
 
-import {
-  threeFourthsRow,
-  fourthRow
-} from '../utils/grid';
+import { flexboxGridColumnWidth } from '../utils/grid';
 
 import {
   getNumberDisplay,
@@ -19,10 +16,10 @@ import { operators } from '../constants';
 
 let NumberDisplay = ({ operator, numberDisplay }) => (
   <Row className={styles.row}>
-    <Col {...fourthRow} className={classnames(styles.numberDisplay)}>
+    <Col {...flexboxGridColumnWidth(1/12)} className={classnames(styles.numberDisplay)}>
       {operator}
     </Col>
-    <Col {...threeFourthsRow} className={classnames(styles.numberDisplay)}>
+    <Col {...flexboxGridColumnWidth(11/12)} className={classnames(styles.numberDisplay)}>
       {numberDisplay}
     </Col>
   </Row>

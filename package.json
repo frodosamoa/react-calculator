@@ -4,11 +4,14 @@
   "private": true,
   "dependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "bignumber.js": "^5.0.0",
     "classnames": "^2.2.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-flexbox-grid": "^2.0.0",
+    "react-modal": "^3.1.10",
     "react-redux": "^5.0.6",
+    "react-scale-text": "^1.2.2",
     "redux": "^3.7.2",
     "reselect": "^3.0.1"
   },

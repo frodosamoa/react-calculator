@@ -47,4 +47,8 @@ $operator-cell-color: #F78128;
   @include calculatorCell($number-display-color, flex-end);
 
   color: white;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

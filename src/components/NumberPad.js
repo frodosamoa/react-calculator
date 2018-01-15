@@ -4,29 +4,25 @@ import classnames from 'classnames';
 import styles from './calculator.scss';
 import { Row, Col } from 'react-flexbox-grid';
 
-import {
-  threeFourthsRow,
-  twoThirdsRow,
-  halfRow,
-  thirdRow,
-  fourthRow
-} from '../utils/grid';
+import { flexboxGridColumnWidth } from '../utils/grid';
 
-import { clear } from '../actions/index';
+import { clear, toFixed, openModal } from '../actions';
 
 import NumberCell from './NumberCell';
 
 const numberPad = [[7, 8, 9], [4, 5, 6], [1, 2, 3]];
 
-const NumberPad = ({ onClear, onToFixed }) => (
-  <Col {...threeFourthsRow}>
+const NumberPad = ({ onClear, onToFixed, onOpenModal }) => (
+  <Col {...flexboxGridColumnWidth(3/4)}>
     <Row className={styles.row}>
-      <Col {...thirdRow} className={classnames(styles.clearCell)} onClick={() => {
+      <Col {...flexboxGridColumnWidth(1/3)} className={classnames(styles.clearCell)} onClick={() => {
         onClear();
       }}>
         C
       </Col>
-      <Col {...twoThirdsRow} className={classnames(styles.clearCell)}>
+      <Col {...flexboxGridColumnWidth(2/3)} className={classnames(styles.clearCell)} onClick={() => {
+        onOpenModal();
+      }}>
         admin
       </Col>
     </Row>
@@ -38,10 +34,10 @@ const NumberPad = ({ onClear, onToFixed }) => (
       </Row>
     ))}
     <Row className={styles.row}>
-      <NumberCell number={0} gridStyle={twoThirdsRow} />
+      <NumberCell number={0} gridStyle={flexboxGridColumnWidth(2/3)} />
       <Col
         className={classnames(styles.numberCell)}
-        {...thirdRow}
+        {...flexboxGridColumnWidth(1/3)}
         onClick={() => onToFixed()}>
         {'.'}
       </Col>
@@ -57,6 +53,9 @@ export default connect(
     },
     onToFixed: () => {
       dispatch(toFixed());
+    },
+    onOpenModal: () => {
+      dispatch(openModal());
     }
   })
 )(NumberPad);

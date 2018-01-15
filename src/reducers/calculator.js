@@ -1,38 +1,44 @@
 import {
   TYPE_NUMBER,
   CLEAR,
-  ADD,
-  SUBTRACT,
-  MULTIPLY,
-  DIVIDE,
+  TYPE_OPERATOR,
   EQUALS,
   TO_FIXED
 } from '../actions/actionTypes';
+
+import {
+  ADD,
+  SUBTRACT,
+  MULTIPLY,
+  DIVIDE
+} from '../constants';
 
 import { createSelector } from 'reselect';
 
 import { operators } from '../constants';
 
+import BigNumber from 'bignumber.js';
+
 export const initialState = {
   previousInput: null,
-  currentInput: 0,
+  currentInput: BigNumber(0),
   operator: null,
-  computations: []
+  computations: [],
+  isFloat: false
 };
 
-const currentInputSelector = state => state.currentInput;
-const computationsSelector = state => state.computations;
-const operatorSelector = state => state.operator;
+const currentInputSelector = state => state.calculator.currentInput;
+const computationsSelector = state => state.calculator.computations;
+const operatorSelector = state => state.calculator.operator;
+const lastComputationSelector = state => state.calculator.computations[state.calculator.computations.length - 1];
+const isFloatSelector = state => state.calculator.isFloat;
 
 export const getNumberDisplay = createSelector(
   currentInputSelector,
-  computationsSelector,
-  (currentInput, computations) => {
-    if (currentInput !== null) {
-      return currentInput;
-    }
-
-    return computations[computations.length - 1];
+  lastComputationSelector,
+  isFloatSelector,
+  (currentInput, lastComputation, isFloat) => {
+    return `${currentInput.toString()}${isFloat ? '.' : ''}`;
   }
 );
 
@@ -45,79 +51,112 @@ export const getOperatorDisplay = createSelector(
   }
 );
 
-const compute = (operator, previousInput, currentInput) => {
+const compute = (operator, firstNumber, secondNumber) => {
   switch (operator) {
     case ADD:
-      return previousInput + currentInput;
+      return firstNumber.plus(secondNumber);
     case SUBTRACT:
-      return previousInput - currentInput;
+      return firstNumber.minus(secondNumber);
     case MULTIPLY:
-      return previousInput * currentInput;
+      return firstNumber.times(secondNumber);
     case DIVIDE:
-      return previousInput / currentInput;
+      return firstNumber.dividedBy(secondNumber);
   }
 }
 
+// taken from: https://stackoverflow.com/a/27865285
+const precision = (a) => {
+  if (!isFinite(a)) {
+    return 0;
+  }
+
+  let e = 1;
+  let p = 0;
+  while (Math.round(a * e) / e !== a) {
+    e *= 10;
+    p++;
+  }
+  return p;
+}
+
 export default function input (state = initialState, action) {
+  const noPreviousInput = state.previousInput === null;
+  const noOperator = state.operator === null;
+
+  const {
+    operator,
+    previousInput,
+    currentInput,
+    isFloat
+  } = state;
+
   switch (action.type) {
-    case ADD:
-    case SUBTRACT:
-    case MULTIPLY:
-    case DIVIDE:
-      if (state.previousInput === null && state.currentInput === null) {
+    case TYPE_OPERATOR:
+      if (noPreviousInput) {
         return {
           ...state,
-          operator: action.type,
-          previousInput: state.computations[state.computations.length - 1],
+          operator: action.operator
         };
-      } else if (state.previousInput === null && state.currentInput !== null) {
-        return {
-          ...state,
-          operator: action.type
-        };
-      } else if (state.previousInput && state.currentInput) {
-        return {
-          ...state,
-          operator: action.type,
-          previousInput: null,
-          currentInput: compute(state.operator, state.previousInput, state.currentInput)
-        };
-      }
-
-      return state;
-    case EQUALS:
-      if (!state.operator && !state.previousInput) {
-        return state;
-      }
-
-      if (state.operator && state.previousInput) {
-        const computed = compute(state.operator, state.previousInput, state.currentInput);
-        return {
-          operator: null,
-          previousInput: null,
-          currentInput: null,
-          computations: [
-            ...state.computations,
-            computed
-          ]
-        }
-      }
-    case TYPE_NUMBER:
-      if (state.operator && state.previousInput === null) {
-        return {
-          ...state,
-          previousInput: state.currentInput,
-          currentInput: action.value
-        }
       }
 
       return {
         ...state,
-        currentInput: (state.currentInput * 10) + action.value
+        operator: action.operator,
+        previousInput: null,
+        currentInput: compute(operator, previousInput, currentInput)
+      };
+    case EQUALS:
+      let nextCurrentInput;
+
+      if (noOperator) {
+        nextCurrentInput = currentInput;
+      } else {
+        if (noPreviousInput) {
+          nextCurrentInput = compute(operator, currentInput, currentInput);
+        } else {
+          nextCurrentInput = compute(operator, previousInput, currentInput);
+        }
+      }
+
+      return {
+        operator: null,
+        previousInput: null,
+        currentInput: nextCurrentInput,
+        computations: [
+          ...state.computations,
+          nextCurrentInput
+        ]
+      };
+    case TYPE_NUMBER:
+      if (!noOperator) {
+        if (noPreviousInput) {
+          return {
+            ...state,
+            previousInput: currentInput,
+            isFloat: false,
+            currentInput: BigNumber(action.value)
+          }
+        }
+      }
+
+      if (isFloat || !currentInput.isInteger()) {
+        const p = precision(currentInput.toNumber());
+
+        return {
+          ...state,
+          isFloat: false,
+          currentInput: currentInput.plus(action.value / (10 ** (p + 1)))
+        }
+      } else {
+        return {
+          ...state,
+          currentInput: currentInput.times(10).plus(action.value)
+        }
       }
     case TO_FIXED:
       return {
-        ...state
+        ...state,
+        isFloat: true
       }
     case CLEAR:
       return {

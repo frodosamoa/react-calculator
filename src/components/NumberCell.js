@@ -5,11 +5,11 @@ import styles from './calculator.scss';
 
 import { Col } from 'react-flexbox-grid';
 
-import { typeNumber } from '../actions/index';
+import { typeNumber } from '../actions';
 
-import { thirdRow } from '../utils/grid';
+import { flexboxGridColumnWidth } from '../utils/grid';
 
-let NumberCell = ({ number, onTypeNumber, gridStyle = thirdRow }) => (
+let NumberCell = ({ number, onTypeNumber, gridStyle = flexboxGridColumnWidth(1/3)}) => (
   <Col
     className={classnames(styles.numberCell)}
     {...gridStyle}
