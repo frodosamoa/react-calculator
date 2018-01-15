@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import React from 'react';
+import { Grid, Row } from 'react-flexbox-grid';
 
 import NumberDisplay from './NumberDisplay';
 import NumberPad from './NumberPad';

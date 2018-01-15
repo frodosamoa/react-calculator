@@ -43,7 +43,10 @@ describe('calculator reducer', () => {
         computations: [],
         operator: null,
       };
-      expect(calculator(firstState, typeNumber(5)).currentInput).toEqual((firstState.currentInput * 10) + 5);
+      const nextCurrentInputState = calculator(firstState, typeNumber(5)).currentInput;
+      const nextCurrentInput = (firstState.currentInput * 10) + 5;
+
+      expect(nextCurrentInputState).toEqual(nextCurrentInput);
     });
 
     it('when we have an operator and no previous iqnput', () => {

@@ -1,3 +1,6 @@
+import BigNumber from 'bignumber.js';
+import { createSelector } from 'reselect';
+
 import {
   TYPE_NUMBER,
   CLEAR,
@@ -11,13 +14,8 @@ import {
   SUBTRACT,
   MULTIPLY,
   DIVIDE,
+  operators,
 } from '../constants';
-
-import { createSelector } from 'reselect';
-
-import { operators } from '../constants';
-
-import BigNumber from 'bignumber.js';
 
 export const initialState = {
   previousInput: null,
@@ -30,7 +28,10 @@ export const initialState = {
 const currentInputSelector = state => state.calculator.currentInput;
 const computationsSelector = state => state.calculator.computations;
 const operatorSelector = state => state.calculator.operator;
-const lastComputationSelector = state => state.calculator.computations[state.calculator.computations.length - 1];
+const lastComputationSelector = createSelector(
+  computationsSelector,
+  computations => computations[computations.length - 1],
+);
 const displayDecimalSelector = state => state.calculator.displayDecimal;
 
 export const getNumberDisplay = createSelector(
@@ -59,12 +60,14 @@ const compute = (operator, firstNumber, secondNumber) => {
       return firstNumber.times(secondNumber);
     case DIVIDE:
       return firstNumber.dividedBy(secondNumber);
+    default:
+      return firstNumber; // no operator that we recognize, return first number
   }
 };
 
 // taken from: https://stackoverflow.com/a/27865285
 const precision = (a) => {
-  if (!isFinite(a)) {
+  if (!Number.isFinite(a)) {
     return 0;
   }
 
@@ -72,7 +75,7 @@ const precision = (a) => {
   let p = 0;
   while (Math.round(a * e) / e !== a) {
     e *= 10;
-    p++;
+    p += 1;
   }
   return p;
 };
@@ -104,7 +107,7 @@ export default function input(state = initialState, action) {
         previousInput: null,
         currentInput: compute(operator, previousInput, currentInput),
       };
-    case EQUALS:
+    case EQUALS: {
       let nextCurrentInput;
 
       if (noOperator) {
@@ -124,6 +127,7 @@ export default function input(state = initialState, action) {
           nextCurrentInput,
         ],
       };
+    }
     case TYPE_NUMBER:
       if (!noOperator) {
         if (noPreviousInput) {

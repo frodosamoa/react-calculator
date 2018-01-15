@@ -1,13 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import styles from './calculator.scss';
 import { Row, Col } from 'react-flexbox-grid';
 
+import styles from './calculator.scss';
 import { flexboxGridColumnWidth } from '../utils/grid';
-
 import { clear, toFixed, openModal } from '../actions';
-
 import NumberCell from './NumberCell';
 
 const numberPad = [[7, 8, 9], [4, 5, 6], [1, 2, 3]];
@@ -34,8 +33,8 @@ const NumberPad = ({ onClear, onToFixed, onOpenModal }) => (
         admin
       </Col>
     </Row>
-    {numberPad.map((row, index) => (
-      <Row key={index} className={styles.row}>
+    {numberPad.map(row => (
+      <Row key={row[0]} className={styles.row}>
         {row.map(number => (
           <NumberCell key={number} number={number} />
         ))}
@@ -53,6 +52,12 @@ const NumberPad = ({ onClear, onToFixed, onOpenModal }) => (
     </Row>
   </Col>
 );
+
+NumberPad.propTypes = {
+  onClear: PropTypes.func.isRequired,
+  onToFixed: PropTypes.func.isRequired,
+  onOpenModal: PropTypes.func.isRequired,
+};
 
 export default connect(
   null,

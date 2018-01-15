@@ -1,15 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import styles from './calculator.scss';
-
 import { Col } from 'react-flexbox-grid';
 
+import styles from './calculator.scss';
 import { typeNumber } from '../actions';
-
 import { flexboxGridColumnWidth } from '../utils/grid';
 
-const NumberCell = ({ number, onTypeNumber, gridStyle = flexboxGridColumnWidth(1 / 3) }) => (
+const NumberCell = ({ number, onTypeNumber, gridStyle }) => (
   <Col
     className={classnames(styles.numberCell)}
     {...gridStyle}
@@ -18,6 +17,16 @@ const NumberCell = ({ number, onTypeNumber, gridStyle = flexboxGridColumnWidth(1
     {number}
   </Col>
 );
+
+NumberCell.defaultProps = {
+  gridStyle: flexboxGridColumnWidth(1 / 3),
+};
+
+NumberCell.propTypes = {
+  number: PropTypes.number.isRequired,
+  onTypeNumber: PropTypes.func.isRequired,
+  gridStyle: PropTypes.objectOf(PropTypes.number),
+};
 
 export default connect(
   null,
