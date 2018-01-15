@@ -1,32 +1,42 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import classnames from 'classnames';
 import styles from './calculator.scss';
 import { Row, Col } from 'react-flexbox-grid';
 
-import {
-  fourthRow
-} from '../utils/grid';
+import { flexboxGridColumnWidth } from '../utils/grid';
 
 import OperatorCell from './OperatorCell';
 
-import {
-  ADD,
-  SUBTRACT,
-  DIVIDE,
-  MULTIPLY,
-  EQUALS
-} from '../actions/actionTypes';
-
 import { operators } from '../constants';
 
-const OperatorColumn = () => (
-  <Col {...fourthRow}>
+import { equals } from '../actions';
+
+const OperatorColumn = ({ onEquals }) => (
+  <Col {...flexboxGridColumnWidth(1/4)}>
     {operators.map((operator) => (
       <Row key={operator.actionType} className={styles.row}>
         <OperatorCell {...operator} />
       </Row>
     ))}
+      <Row className={styles.row}>
+        <Col
+          className={classnames(styles.operatorCell)}
+          {...flexboxGridColumnWidth(1)}
+          onClick={() => {
+            onEquals();
+          }}>
+          {'='}
+        </Col>
+      </Row>
   </Col>
 )
 
-export default OperatorColumn;
+export default connect(
+  null,
+  (dispatch) => ({
+    onEquals: () => {
+      dispatch(equals());
+    }
+  })
+)(OperatorColumn);

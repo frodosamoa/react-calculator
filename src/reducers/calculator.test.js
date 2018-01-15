@@ -3,7 +3,7 @@ import calculator, { initialState } from './calculator';
 import {
   clear,
   typeNumber
-} from '../actions/index';
+} from '../actions';
 
 import {
   MULTIPLY
@@ -50,7 +50,7 @@ describe('calculator reducer', () => {
       );
     });
 
-    it('when we have an operator and no previous input', () => {
+    it('when we have an operator and no previous iqnput', () => {
       const firstState = {
         previousInput: null,
         currentInput: 58,

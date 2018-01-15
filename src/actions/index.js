@@ -1,11 +1,19 @@
 import {
   CLEAR,
+  EQUALS,
   TYPE_NUMBER,
-  TO_FIXED
+  TYPE_OPERATOR,
+  TO_FIXED,
+  OPEN_MODAL,
+  CLOSE_MODAL
 } from './actionTypes';
 
 export const clear = () => ({
   type: CLEAR
+});
+
+export const equals = () => ({
+  type: EQUALS
 });
 
 export const typeNumber = (value) => ({
@@ -18,5 +26,14 @@ export const toFixed = () => ({
 })
 
 export const typeOperator = (operator) => ({
-  type: operator
+  type: TYPE_OPERATOR,
+  operator
+});
+
+export const openModal = () => ({
+  type: OPEN_MODAL
+});
+
+export const closeModal = () => ({
+  type: CLOSE_MODAL
 });
