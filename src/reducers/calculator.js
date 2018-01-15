@@ -3,14 +3,14 @@ import {
   CLEAR,
   TYPE_OPERATOR,
   EQUALS,
-  TO_FIXED
+  TO_FIXED,
 } from '../actions/actionTypes';
 
 import {
   ADD,
   SUBTRACT,
   MULTIPLY,
-  DIVIDE
+  DIVIDE,
 } from '../constants';
 
 import { createSelector } from 'reselect';
@@ -24,7 +24,7 @@ export const initialState = {
   currentInput: BigNumber(0),
   operator: null,
   computations: [],
-  displayDecimal: false
+  displayDecimal: false,
 };
 
 const currentInputSelector = state => state.calculator.currentInput;
@@ -37,18 +37,16 @@ export const getNumberDisplay = createSelector(
   currentInputSelector,
   lastComputationSelector,
   displayDecimalSelector,
-  (currentInput, lastComputation, displayDecimal) => {
-    return `${currentInput.toString()}${displayDecimal ? '.' : ''}`;
-  }
+  (currentInput, lastComputation, displayDecimal) => `${currentInput.toString()}${displayDecimal ? '.' : ''}`,
 );
 
 export const getOperatorDisplay = createSelector(
   operatorSelector,
   (operator) => {
-      const opDisplay = operators.find((op) => op.actionType === operator);
+    const opDisplay = operators.find(op => op.actionType === operator);
 
-      return (opDisplay && opDisplay.operator) || '';
-  }
+    return (opDisplay && opDisplay.operator) || '';
+  },
 );
 
 const compute = (operator, firstNumber, secondNumber) => {
@@ -62,7 +60,7 @@ const compute = (operator, firstNumber, secondNumber) => {
     case DIVIDE:
       return firstNumber.dividedBy(secondNumber);
   }
-}
+};
 
 // taken from: https://stackoverflow.com/a/27865285
 const precision = (a) => {
@@ -77,9 +75,9 @@ const precision = (a) => {
     p++;
   }
   return p;
-}
+};
 
-export default function input (state = initialState, action) {
+export default function input(state = initialState, action) {
   const noPreviousInput = state.previousInput === null;
   const noOperator = state.operator === null;
 
@@ -88,7 +86,7 @@ export default function input (state = initialState, action) {
     previousInput,
     currentInput,
     displayDecimal,
-    computations
+    computations,
   } = state;
 
   switch (action.type) {
@@ -96,7 +94,7 @@ export default function input (state = initialState, action) {
       if (noPreviousInput) {
         return {
           ...state,
-          operator: action.operator
+          operator: action.operator,
         };
       }
 
@@ -104,19 +102,17 @@ export default function input (state = initialState, action) {
         ...state,
         operator: action.operator,
         previousInput: null,
-        currentInput: compute(operator, previousInput, currentInput)
+        currentInput: compute(operator, previousInput, currentInput),
       };
     case EQUALS:
       let nextCurrentInput;
 
       if (noOperator) {
         nextCurrentInput = currentInput;
+      } else if (noPreviousInput) {
+        nextCurrentInput = compute(operator, currentInput, currentInput);
       } else {
-        if (noPreviousInput) {
-          nextCurrentInput = compute(operator, currentInput, currentInput);
-        } else {
-          nextCurrentInput = compute(operator, previousInput, currentInput);
-        }
+        nextCurrentInput = compute(operator, previousInput, currentInput);
       }
 
       return {
@@ -125,8 +121,8 @@ export default function input (state = initialState, action) {
         currentInput: nextCurrentInput,
         computations: [
           ...computations,
-          nextCurrentInput
-        ]
+          nextCurrentInput,
+        ],
       };
     case TYPE_NUMBER:
       if (!noOperator) {
@@ -135,8 +131,8 @@ export default function input (state = initialState, action) {
             ...state,
             previousInput: currentInput,
             displayDecimal: false,
-            currentInput: BigNumber(action.value)
-          }
+            currentInput: BigNumber(action.value),
+          };
         }
       }
 
@@ -146,23 +142,23 @@ export default function input (state = initialState, action) {
         return {
           ...state,
           displayDecimal: false,
-          currentInput: currentInput.plus(action.value / (10 ** (p + 1)))
-        }
-      } else {
-        return {
-          ...state,
-          currentInput: currentInput.times(10).plus(action.value)
-        }
+          currentInput: currentInput.plus(action.value / (10 ** (p + 1))),
+        };
       }
+      return {
+        ...state,
+        currentInput: currentInput.times(10).plus(action.value),
+      };
+
     case TO_FIXED:
       return {
         ...state,
-        displayDecimal: currentInput.isInteger()
-      }
+        displayDecimal: currentInput.isInteger(),
+      };
     case CLEAR:
       return {
         ...initialState,
-        computations
+        computations,
       };
     default:
       return state;

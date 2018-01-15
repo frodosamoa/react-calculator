@@ -9,11 +9,12 @@ import { typeOperator } from '../actions';
 
 import { flexboxGridColumnWidth } from '../utils/grid';
 
-let OperatorCell = ({ operator, onTypeOperator }) => (
+const OperatorCell = ({ operator, onTypeOperator }) => (
   <Col
     className={classnames(styles.operatorCell)}
     {...flexboxGridColumnWidth(1)}
-    onClick={() => onTypeOperator()}>
+    onClick={() => onTypeOperator()}
+  >
     {operator}
   </Col>
 );
@@ -23,6 +24,6 @@ export default connect(
   (dispatch, ownProps) => ({
     onTypeOperator: () => {
       dispatch(typeOperator(ownProps.actionType));
-    }
-  })
+    },
+  }),
 )(OperatorCell);

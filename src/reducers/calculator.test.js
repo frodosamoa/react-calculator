@@ -2,11 +2,11 @@ import calculator, { initialState } from './calculator';
 
 import {
   clear,
-  typeNumber
+  typeNumber,
 } from '../actions';
 
 import {
-  MULTIPLY
+  MULTIPLY,
 } from '../actions/actionTypes';
 
 describe('calculator reducer', () => {
@@ -19,7 +19,7 @@ describe('calculator reducer', () => {
       previousInput: 12344567,
       currentInput: 980759234,
       computations: [6453, 5432134, 43, 234342],
-      operator: MULTIPLY
+      operator: MULTIPLY,
     };
 
     const nextState = calculator(firstState, clear());
@@ -41,13 +41,9 @@ describe('calculator reducer', () => {
         previousInput: null,
         currentInput: 58,
         computations: [],
-        operator: null
+        operator: null,
       };
-      expect(
-        calculator(firstState, typeNumber(5)).currentInput
-      ).toEqual(
-        (firstState.currentInput * 10) + 5
-      );
+      expect(calculator(firstState, typeNumber(5)).currentInput).toEqual((firstState.currentInput * 10) + 5);
     });
 
     it('when we have an operator and no previous iqnput', () => {
@@ -55,12 +51,12 @@ describe('calculator reducer', () => {
         previousInput: null,
         currentInput: 58,
         computations: [],
-        operator: MULTIPLY
+        operator: MULTIPLY,
       };
 
       const nextState = calculator(firstState, typeNumber(5));
       expect(nextState.currentInput).toEqual(5);
       expect(nextState.previousInput).toEqual(firstState.currentInput);
     });
-  }); 
+  });
 });

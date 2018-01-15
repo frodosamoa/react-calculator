@@ -6,18 +6,18 @@ export const DIVIDE = 'DIVIDE';
 export const operators = [
   {
     operator: '÷',
-    actionType: DIVIDE
+    actionType: DIVIDE,
   },
   {
     operator: 'x',
-    actionType: MULTIPLY
+    actionType: MULTIPLY,
   },
   {
     operator: '–',
-    actionType: SUBTRACT
+    actionType: SUBTRACT,
   },
   {
     operator: '+',
-    actionType: ADD
-  }
+    actionType: ADD,
+  },
 ];

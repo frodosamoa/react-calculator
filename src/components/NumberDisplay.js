@@ -9,25 +9,23 @@ import { flexboxGridColumnWidth } from '../utils/grid';
 
 import {
   getNumberDisplay,
-  getOperatorDisplay
+  getOperatorDisplay,
 } from '../reducers/calculator';
 
 import { operators } from '../constants';
 
-let NumberDisplay = ({ operator, numberDisplay }) => (
+const NumberDisplay = ({ operator, numberDisplay }) => (
   <Row className={styles.row}>
-    <Col {...flexboxGridColumnWidth(1/12)} className={classnames(styles.numberDisplay)}>
+    <Col {...flexboxGridColumnWidth(1 / 12)} className={classnames(styles.numberDisplay)}>
       {operator}
     </Col>
-    <Col {...flexboxGridColumnWidth(11/12)} className={classnames(styles.numberDisplay)}>
+    <Col {...flexboxGridColumnWidth(11 / 12)} className={classnames(styles.numberDisplay)}>
       {numberDisplay}
     </Col>
   </Row>
 );
 
-export default connect(
-  (state) => ({
-    numberDisplay: getNumberDisplay(state),
-    operator: getOperatorDisplay(state)
-  })
-)(NumberDisplay);
+export default connect(state => ({
+  numberDisplay: getNumberDisplay(state),
+  operator: getOperatorDisplay(state),
+}))(NumberDisplay);
