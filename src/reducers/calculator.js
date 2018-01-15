@@ -24,21 +24,21 @@ export const initialState = {
   currentInput: BigNumber(0),
   operator: null,
   computations: [],
-  isFloat: false
+  displayDecimal: false
 };
 
 const currentInputSelector = state => state.calculator.currentInput;
 const computationsSelector = state => state.calculator.computations;
 const operatorSelector = state => state.calculator.operator;
 const lastComputationSelector = state => state.calculator.computations[state.calculator.computations.length - 1];
-const isFloatSelector = state => state.calculator.isFloat;
+const displayDecimalSelector = state => state.calculator.displayDecimal;
 
 export const getNumberDisplay = createSelector(
   currentInputSelector,
   lastComputationSelector,
-  isFloatSelector,
-  (currentInput, lastComputation, isFloat) => {
-    return `${currentInput.toString()}${isFloat ? '.' : ''}`;
+  displayDecimalSelector,
+  (currentInput, lastComputation, displayDecimal) => {
+    return `${currentInput.toString()}${displayDecimal ? '.' : ''}`;
   }
 );
 
@@ -87,7 +87,8 @@ export default function input (state = initialState, action) {
     operator,
     previousInput,
     currentInput,
-    isFloat
+    displayDecimal,
+    computations
   } = state;
 
   switch (action.type) {
@@ -123,7 +124,7 @@ export default function input (state = initialState, action) {
         previousInput: null,
         currentInput: nextCurrentInput,
         computations: [
-          ...state.computations,
+          ...computations,
           nextCurrentInput
         ]
       };
@@ -133,18 +134,18 @@ export default function input (state = initialState, action) {
           return {
             ...state,
             previousInput: currentInput,
-            isFloat: false,
+            displayDecimal: false,
             currentInput: BigNumber(action.value)
           }
         }
       }
 
-      if (isFloat || !currentInput.isInteger()) {
+      if (displayDecimal || !currentInput.isInteger()) {
         const p = precision(currentInput.toNumber());
 
         return {
           ...state,
-          isFloat: false,
+          displayDecimal: false,
           currentInput: currentInput.plus(action.value / (10 ** (p + 1)))
         }
       } else {
@@ -156,12 +157,12 @@ export default function input (state = initialState, action) {
     case TO_FIXED:
       return {
         ...state,
-        isFloat: true
+        displayDecimal: currentInput.isInteger()
       }
     case CLEAR:
       return {
         ...initialState,
-        computations: state.computations
+        computations
       };
     default:
       return state;
