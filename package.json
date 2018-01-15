@@ -6,6 +6,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bignumber.js": "^5.0.0",
     "classnames": "^2.2.5",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-flexbox-grid": "^2.0.0",

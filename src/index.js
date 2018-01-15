@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import './index.scss';
-import Calculator from './components/Calculator';
-
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducers from './reducers';
 
+import './index.scss';
+import reducers from './reducers';
+import Calculator from './components/Calculator';
 import registerServiceWorker from './registerServiceWorker';
 
 const store = createStore(reducers);

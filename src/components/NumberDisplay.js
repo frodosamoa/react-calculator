@@ -1,18 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import styles from './calculator.scss';
-
 import { Row, Col } from 'react-flexbox-grid';
 
+import styles from './calculator.scss';
 import { flexboxGridColumnWidth } from '../utils/grid';
-
 import {
   getNumberDisplay,
   getOperatorDisplay,
 } from '../reducers/calculator';
-
-import { operators } from '../constants';
 
 const NumberDisplay = ({ operator, numberDisplay }) => (
   <Row className={styles.row}>
@@ -24,6 +21,11 @@ const NumberDisplay = ({ operator, numberDisplay }) => (
     </Col>
   </Row>
 );
+
+NumberDisplay.propTypes = {
+  operator: PropTypes.string.isRequired,
+  numberDisplay: PropTypes.string.isRequired,
+};
 
 export default connect(state => ({
   numberDisplay: getNumberDisplay(state),

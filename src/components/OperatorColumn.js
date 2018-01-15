@@ -1,16 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import styles from './calculator.scss';
 import { Row, Col } from 'react-flexbox-grid';
 
+import styles from './calculator.scss';
 import { flexboxGridColumnWidth } from '../utils/grid';
-
-import OperatorCell from './OperatorCell';
-
 import { operators } from '../constants';
-
 import { equals } from '../actions';
+import OperatorCell from './OperatorCell';
 
 const OperatorColumn = ({ onEquals }) => (
   <Col {...flexboxGridColumnWidth(1 / 4)}>
@@ -32,6 +30,10 @@ const OperatorColumn = ({ onEquals }) => (
     </Row>
   </Col>
 );
+
+OperatorColumn.propTypes = {
+  onEquals: PropTypes.func.isRequired,
+};
 
 export default connect(
   null,
