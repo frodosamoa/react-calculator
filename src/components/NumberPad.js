@@ -1,22 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 import { Row, Col } from 'react-flexbox-grid';
 
 import styles from './calculator.scss';
 import { flexboxGridColumnWidth } from '../utils/grid';
 import { clear, toFixed, openModal } from '../actions';
 import NumberCell from './NumberCell';
-
-const numberPad = [[7, 8, 9], [4, 5, 6], [1, 2, 3]];
+import { numberPad } from '../constants';
 
 const NumberPad = ({ onClear, onToFixed, onOpenModal }) => (
   <Col {...flexboxGridColumnWidth(3 / 4)}>
     <Row className={styles.row}>
       <Col
         {...flexboxGridColumnWidth(1 / 3)}
-        className={classnames(styles.clearCell)}
+        className={styles.clearCell}
         onClick={() => {
         onClear();
       }}
@@ -25,7 +23,7 @@ const NumberPad = ({ onClear, onToFixed, onOpenModal }) => (
       </Col>
       <Col
         {...flexboxGridColumnWidth(2 / 3)}
-        className={classnames(styles.clearCell)}
+        className={styles.clearCell}
         onClick={() => {
         onOpenModal();
       }}
@@ -43,7 +41,7 @@ const NumberPad = ({ onClear, onToFixed, onOpenModal }) => (
     <Row className={styles.row}>
       <NumberCell number={0} gridStyle={flexboxGridColumnWidth(2 / 3)} />
       <Col
-        className={classnames(styles.numberCell)}
+        className={styles.numberCell}
         {...flexboxGridColumnWidth(1 / 3)}
         onClick={() => onToFixed()}
       >

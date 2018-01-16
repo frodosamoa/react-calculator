@@ -1,25 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 import { Col } from 'react-flexbox-grid';
 
 import styles from './calculator.scss';
 import { typeOperator } from '../actions';
 import { flexboxGridColumnWidth } from '../utils/grid';
 
-const OperatorCell = ({ operator, onTypeOperator }) => (
+const OperatorCell = ({ display, onTypeOperator }) => (
   <Col
-    className={classnames(styles.operatorCell)}
+    className={styles.operatorCell}
     {...flexboxGridColumnWidth(1)}
     onClick={() => onTypeOperator()}
   >
-    {operator}
+    {display}
   </Col>
 );
 
 OperatorCell.propTypes = {
-  operator: PropTypes.string.isRequired,
+  display: PropTypes.string.isRequired,
   onTypeOperator: PropTypes.func.isRequired,
 };
 
@@ -27,7 +26,7 @@ export default connect(
   null,
   (dispatch, ownProps) => ({
     onTypeOperator: () => {
-      dispatch(typeOperator(ownProps.actionType));
+      dispatch(typeOperator(ownProps.constant));
     },
   }),
 )(OperatorCell);
