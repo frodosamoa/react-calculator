@@ -4,42 +4,54 @@ import PropTypes from 'prop-types';
 
 import Modal from 'react-modal';
 
-import { closeModal } from '../actions';
+import { closeModal, searchComputations } from '../actions';
 import { computationsSelector } from '../reducers/calculator';
 
 const ComputationsModal = ({
   isOpen,
   onCloseModal,
-  computations,
+  onInputChange,
+  visibleComputations,
+  query,
 }) => (
   <Modal
     ariaHideApp={false}
     isOpen={isOpen}
     onRequestClose={onCloseModal}
   >
-    <input type="text" />
-    {computations.map((c, index) => (
-      <li key={index}>{c.toString()}</li>
-    ))}
+    <input type="text" onChange={(e) => onInputChange(e)} value={query} />
     <button onClick={() => onCloseModal()}>
-      Close me.
+      Close
     </button>
+    <ul>
+      {visibleComputations.map((c, index) => (
+        <li key={index}>{c}</li>
+      ))}
+    </ul>
   </Modal>
 );
 
 ComputationsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onCloseModal: PropTypes.func.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
 export default connect(
   state => ({
     isOpen: state.modal.isOpen,
-    computations: computationsSelector(state),
+    visibleComputations: computationsSelector(state).map((c) =>
+      c.toString()).filter((c) =>
+        c.includes(state.modal.query)
+      ),
+    query: state.modal.query
   }),
   dispatch => ({
     onCloseModal: () => {
       dispatch(closeModal());
     },
+    onInputChange: (e) => {
+      dispatch(searchComputations(e.target.value));
+    }
   }),
 )(ComputationsModal);

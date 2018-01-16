@@ -1,3 +1,5 @@
+import { batchActions } from 'redux-batched-actions';
+
 import {
   CLEAR,
   EQUALS,
@@ -6,39 +8,65 @@ import {
   TO_FIXED,
   OPEN_MODAL,
   CLOSE_MODAL,
+  SEARCH_COMPUTATIONS
 } from './actionTypes';
 
 import { operators } from '../constants';
 
-export const clear = () => ({
-  type: CLEAR,
-});
+const makeActionCreator = (type, ...argNames) => {
+  return function (...args) {
+    let action = { type };
+    argNames.forEach((arg, index) => {
+      action[argNames[index]] = args[index];
+    });
+    return action;
+  }
+}
 
-export const equals = () => ({
-  type: EQUALS,
-});
+export const clear = makeActionCreator(CLEAR);
+export const equals = makeActionCreator(EQUALS);
+export const toFixed = makeActionCreator(TO_FIXED);
+export const openModal = makeActionCreator(OPEN_MODAL);
+export const closeModal = makeActionCreator(CLOSE_MODAL);
 
-export const typeNumber = value => ({
-  type: TYPE_NUMBER,
-  value,
-});
+export const typeNumber = makeActionCreator(TYPE_NUMBER, 'value');
+export const typeOperator = makeActionCreator(TYPE_OPERATOR, 'operator');
+export const searchComputations = makeActionCreator(SEARCH_COMPUTATIONS, 'query');
 
-export const toFixed = () => ({
-  type: TO_FIXED,
-});
+const random = (int) => {
+  return Math.floor(Math.random() * int);
+}
 
-export const typeOperator = operator => ({
-  type: TYPE_OPERATOR,
-  operator,
-});
+const monkeysTyping = () => {
+  const operatorConstants = operators.map((op) => op.constant);
 
-export const openModal = () => ({
-  type: OPEN_MODAL,
-});
+  let actions = [];
+  let amountOfDigits;
+  let amountOfOperations = 100;
 
-export const closeModal = () => ({
-  type: CLOSE_MODAL,
-});
+  while (amountOfOperations > 0) {
+    amountOfDigits = random(15) + 1;
+
+    while (amountOfDigits > 0) {
+      actions.push(typeNumber(random(9) + 1));
+      amountOfDigits -= 1;
+    }
+
+    if (amountOfOperations % 3 == 0) {
+      actions.push(equals());
+      actions.push(clear());
+    } else {
+      const randomOperator = operatorConstants[random(operatorConstants.length)]
+      actions.push(typeOperator(randomOperator));
+    }
+
+    amountOfOperations -= 1;
+  }
+
+  actions.push(equals());
+
+  return batchActions(actions);
+}
 
 // following action taken from link below, but modified for my use case:
 // https://github.com/reactjs/redux/issues/787
@@ -85,7 +113,7 @@ export const globalKeyPress = (e) => {
     case 'C':
       return clear();
     case ' ':
-      return {};
+      return monkeysTyping();
     default:
       return {
         type: 'GLOBAL_KEY_PRESS',
