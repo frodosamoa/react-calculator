@@ -20,6 +20,7 @@ import {
 export const initialState = {
   previousInput: null,
   currentInput: BigNumber(0),
+  decimalPlaces: 0,
   operator: null,
   computations: [],
   displayDecimal: false,
@@ -29,12 +30,14 @@ const currentInputSelector = state => state.calculator.currentInput;
 export const computationsSelector = state => state.calculator.computations;
 const operatorSelector = state => state.calculator.operator;
 const displayDecimalSelector = state => state.calculator.displayDecimal;
+const decimalPlacesSelector = state => state.calculator.decimalPlaces;
 
 export const getNumberDisplay = createSelector(
   currentInputSelector,
   displayDecimalSelector,
   (currentInput, displayDecimal) =>
-    `${currentInput.toString()}${displayDecimal ? '.' : ''}`,
+    `${currentInput.toString()}${displayDecimal ? '.' : ''}`
+  },
 );
 
 export const getOperatorDisplay = createSelector(
@@ -46,7 +49,20 @@ export const getOperatorDisplay = createSelector(
   },
 );
 
-const compute = (operator, firstNumber, secondNumber) => {
+const compute = (state) => {
+  const {
+    operator,
+    currentInput,
+    previousInput,
+  } = state;
+
+  const firstNumber = previousInput || currentInput;
+  const secondNumber = currentInput;
+
+  if (firstNumber instanceof Error) {
+    return firstNumber;
+  }
+
   switch (operator) {
     case ADD:
       return firstNumber.plus(secondNumber);
@@ -55,6 +71,10 @@ const compute = (operator, firstNumber, secondNumber) => {
     case MULTIPLY:
       return firstNumber.times(secondNumber);
     case DIVIDE:
+      if (secondNumber.equals(0)) {
+        return new Error();
+      }
+
       return firstNumber.dividedBy(secondNumber);
     default:
       return firstNumber; // no operator that we recognize, return first number
@@ -76,90 +96,132 @@ const precision = (a) => {
   return p;
 };
 
-export default function input(state = initialState, action) {
-  const noPreviousInput = state.previousInput === null;
-  const noOperator = state.operator === null;
+const typeOperator = (state, action) => {
+  const {
+    operator,
+    previousInput,
+    currentInput,
+  } = state;
 
+  const noPreviousInput = previousInput === null;
+
+  if (noPreviousInput) {
+    return {
+      ...state,
+      operator: action.operator,
+    };
+  }
+
+  return {
+    ...state,
+    operator: action.operator,
+    previousInput: null,
+    currentInput: compute(state),
+  };
+}
+
+const equals = (state, action) => {
+  const {
+    operator,
+    currentInput,
+    computations
+  } = state;
+
+  const noOperator = operator === null;
+  const nextCurrentInput = noOperator ? currentInput : compute(state);
+
+  return {
+    operator: null,
+    previousInput: null,
+    currentInput: nextCurrentInput,
+    computations: [
+      ...computations,
+      nextCurrentInput,
+    ],
+  };
+}
+
+const typeNumber = (state, action) => {
   const {
     operator,
     previousInput,
     currentInput,
     displayDecimal,
-    computations,
+    decimalPlaces,
   } = state;
 
-  switch (action.type) {
-    case TYPE_OPERATOR:
-      if (noPreviousInput) {
-        return {
-          ...state,
-          operator: action.operator,
-        };
-      }
+  const noPreviousInput = previousInput === null;
+  const noOperator = operator === null;
+
+  if (!noOperator && noPreviousInput) {
+    return {
+      ...state,
+      previousInput: currentInput,
+      displayDecimal: false,
+      currentInput: BigNumber(action.value),
+    };
+  }
+
+  if (displayDecimal) {
+    if (!currentInput.isInteger()) {
+      const p = decimalPlaces;
 
       return {
         ...state,
-        operator: action.operator,
-        previousInput: null,
-        currentInput: compute(operator, previousInput, currentInput),
+        displayDecimal: false,
+        currentInput: currentInput.plus(action.value / (10 ** (decimalPlaces + 1))),
       };
-    case EQUALS: {
-      let nextCurrentInput;
-
-      if (noOperator) {
-        nextCurrentInput = currentInput;
-      } else if (noPreviousInput) {
-        nextCurrentInput = compute(operator, currentInput, currentInput);
-      } else {
-        nextCurrentInput = compute(operator, previousInput, currentInput);
-      }
-
+    } else {
       return {
-        operator: null,
-        previousInput: null,
-        currentInput: nextCurrentInput,
-        computations: [
-          ...computations,
-          nextCurrentInput,
-        ],
-      };
+        ...state,
+        decimalPlaces: decimalPlaces + 1,
+      }
     }
-    case TYPE_NUMBER:
-      if (!noOperator) {
-        if (noPreviousInput) {
-          return {
-            ...state,
-            previousInput: currentInput,
-            displayDecimal: false,
-            currentInput: BigNumber(action.value),
-          };
-        }
-      }
+  }
 
-      if (displayDecimal || !currentInput.isInteger()) {
-        const p = precision(currentInput.toNumber());
+  return {
+    ...state,
+    currentInput: currentInput.times(10).plus(action.value),
+  };
+}
 
-        return {
-          ...state,
-          displayDecimal: false,
-          currentInput: currentInput.plus(action.value / (10 ** (p + 1))),
-        };
-      }
-      return {
-        ...state,
-        currentInput: currentInput.times(10).plus(action.value),
-      };
 
-    case TO_FIXED:
-      return {
-        ...state,
-        displayDecimal: currentInput.isInteger(),
-      };
-    case CLEAR:
-      return {
-        ...initialState,
-        computations,
-      };
+const toFixed = (state, action) => {
+  const {
+    operator,
+    previousInput,
+    currentInput,
+  } = state;
+
+  const noOperator = operator === null;
+
+  if (!noOperator) {
+    return {
+      ...state,
+      previousInput: previousInput || currentInput,
+      displayDecimal: true,
+      currentInput: BigNumber(0),
+    };
+  }
+
+  return {
+    ...state,
+    displayDecimal: currentInput.isInteger(),
+  };
+}
+
+const clearCalculator = (state, action) => ({
+  ...initialState,
+  computations: state.computations
+});
+
+export default function calculator(state = initialState, action) {
+  switch (action.type) {
+    case TYPE_OPERATOR: return typeOperator(state, action);
+    case EQUALS: return equals(state, action);
+    case TYPE_NUMBER: return typeNumber(state, action);
+    case TO_FIXED: return toFixed(state, action);
+    case CLEAR: return clearCalculator(state, action);
     default:
       return state;
   }
