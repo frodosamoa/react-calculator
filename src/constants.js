@@ -3,21 +3,27 @@ export const SUBTRACT = 'SUBTRACT';
 export const MULTIPLY = 'MULTIPLY';
 export const DIVIDE = 'DIVIDE';
 
+export const numberPad = [[7, 8, 9], [4, 5, 6], [1, 2, 3]];
+
 export const operators = [
   {
-    operator: '÷',
-    actionType: DIVIDE,
+    key: '/',
+    display: '÷',
+    constant: DIVIDE,
   },
   {
-    operator: 'x',
-    actionType: MULTIPLY,
+    key: '*',
+    display: 'x',
+    constant: MULTIPLY,
   },
   {
-    operator: '–',
-    actionType: SUBTRACT,
+    key: '-',
+    display: '–',
+    constant: SUBTRACT,
   },
   {
-    operator: '+',
-    actionType: ADD,
+    key: '+',
+    display: '+',
+    constant: ADD,
   },
 ];

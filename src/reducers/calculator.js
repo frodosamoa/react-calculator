@@ -26,27 +26,23 @@ export const initialState = {
 };
 
 const currentInputSelector = state => state.calculator.currentInput;
-const computationsSelector = state => state.calculator.computations;
+export const computationsSelector = state => state.calculator.computations;
 const operatorSelector = state => state.calculator.operator;
-const lastComputationSelector = createSelector(
-  computationsSelector,
-  computations => computations[computations.length - 1],
-);
 const displayDecimalSelector = state => state.calculator.displayDecimal;
 
 export const getNumberDisplay = createSelector(
   currentInputSelector,
-  lastComputationSelector,
   displayDecimalSelector,
-  (currentInput, lastComputation, displayDecimal) => `${currentInput.toString()}${displayDecimal ? '.' : ''}`,
+  (currentInput, displayDecimal) =>
+    `${currentInput.toString()}${displayDecimal ? '.' : ''}`,
 );
 
 export const getOperatorDisplay = createSelector(
   operatorSelector,
   (operator) => {
-    const opDisplay = operators.find(op => op.actionType === operator);
+    const opDisplay = operators.find(op => op.constant === operator);
 
-    return (opDisplay && opDisplay.operator) || '';
+    return (opDisplay && opDisplay.display) || '';
   },
 );
 
