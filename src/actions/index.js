@@ -8,20 +8,20 @@ import {
   TO_FIXED,
   OPEN_MODAL,
   CLOSE_MODAL,
-  SEARCH_COMPUTATIONS
+  SEARCH_COMPUTATIONS,
 } from './actionTypes';
 
 import { operators } from '../constants';
 
-const makeActionCreator = (type, ...argNames) => {
-  return function (...args) {
-    let action = { type };
+const makeActionCreator = (type, ...argNames) =>
+  function actionCreator(...args) {
+    const action = { type };
     argNames.forEach((arg, index) => {
       action[argNames[index]] = args[index];
     });
     return action;
-  }
-}
+  };
+
 
 export const clear = makeActionCreator(CLEAR);
 export const equals = makeActionCreator(EQUALS);
@@ -33,14 +33,12 @@ export const typeNumber = makeActionCreator(TYPE_NUMBER, 'value');
 export const typeOperator = makeActionCreator(TYPE_OPERATOR, 'operator');
 export const searchComputations = makeActionCreator(SEARCH_COMPUTATIONS, 'query');
 
-const random = (int) => {
-  return Math.floor(Math.random() * int);
-}
+const random = int => Math.floor(Math.random() * int);
 
 const monkeysTyping = () => {
-  const operatorConstants = operators.map((op) => op.constant);
+  const operatorConstants = operators.map(op => op.constant);
 
-  let actions = [];
+  const actions = [];
   let amountOfDigits;
   let amountOfOperations = 100;
 
@@ -52,11 +50,11 @@ const monkeysTyping = () => {
       amountOfDigits -= 1;
     }
 
-    if (amountOfOperations % 3 == 0) {
+    if (amountOfOperations % 3 === 0) {
       actions.push(equals());
       actions.push(clear());
     } else {
-      const randomOperator = operatorConstants[random(operatorConstants.length)]
+      const randomOperator = operatorConstants[random(operatorConstants.length)];
       actions.push(typeOperator(randomOperator));
     }
 
@@ -66,16 +64,16 @@ const monkeysTyping = () => {
   actions.push(equals());
 
   return batchActions(actions);
-}
+};
 
 // following action taken from link below, but modified for my use case:
 // https://github.com/reactjs/redux/issues/787
-export const listenToWindowEvent = (name, mapEventToAction, filter = (e) => true) => {
-  return function (dispatch, getState) {
+export const listenToWindowEvent = (name, mapEventToAction) =>
+  function thunk(dispatch, getState) {
     function handleEvent(e) {
       const isModalOpen = getState().modal.isOpen;
 
-      if (filter(e) && !isModalOpen) {
+      if (!isModalOpen) {
         dispatch(mapEventToAction(e));
       }
     }
@@ -83,7 +81,6 @@ export const listenToWindowEvent = (name, mapEventToAction, filter = (e) => true
     window.addEventListener(name, handleEvent);
     return () => window.removeEventListener(name, handleEvent);
   };
-}
 
 export const globalKeyPress = (e) => {
   switch (e.key) {
@@ -101,9 +98,10 @@ export const globalKeyPress = (e) => {
     case '+':
     case '-':
     case '*':
-    case '/':
+    case '/': {
       const operator = operators.find(op => op.key === e.key);
       return typeOperator(operator.constant);
+    }
     case '=':
     case 'Enter':
       return equals();
