@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { enableBatching, batchDispatchMiddleware } from 'redux-batched-actions';
+import { enableBatching } from 'redux-batched-actions';
 
 import './index.scss';
 import reducers from './reducers';
@@ -26,3 +26,7 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 registerServiceWorker();
+
+// TODO: add README.md
+// TODO: .00000000 adding multple zeros after input consolidate displayDecimal and decimalPlaces
+// TODO: make number fit in display

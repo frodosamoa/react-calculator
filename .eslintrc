@@ -4,7 +4,8 @@
     "describe": false,
     "it": false,
     "expect": false,
-    "document": false
+    "document": false,
+    "window": false
   },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]

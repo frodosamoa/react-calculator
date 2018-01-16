@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,7 +20,7 @@ const ComputationsModal = ({
     isOpen={isOpen}
     onRequestClose={onCloseModal}
   >
-    <input type="text" onChange={(e) => onInputChange(e)} value={query} />
+    <input type="text" onChange={e => onInputChange(e)} value={query} />
     <button onClick={() => onCloseModal()}>
       Close
     </button>
@@ -34,17 +35,17 @@ const ComputationsModal = ({
 ComputationsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onCloseModal: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,
+  visibleComputations: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default connect(
   state => ({
     isOpen: state.modal.isOpen,
-    visibleComputations: computationsSelector(state).map((c) =>
-      c.toString()).filter((c) =>
-        c.includes(state.modal.query)
-      ),
-    query: state.modal.query
+    visibleComputations: computationsSelector(state).map(c => c.toString()).filter(c =>
+      c.includes(state.modal.query)),
+    query: state.modal.query,
   }),
   dispatch => ({
     onCloseModal: () => {
@@ -52,6 +53,7 @@ export default connect(
     },
     onInputChange: (e) => {
       dispatch(searchComputations(e.target.value));
-    }
+    },
   }),
 )(ComputationsModal);
+/* eslint-enable react/no-array-index-key */

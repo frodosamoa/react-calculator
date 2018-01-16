@@ -28,7 +28,7 @@ const composedCalculator = lifecycle({
   },
   componentWillUnmount() {
     this.unlistenKeyPress();
-  }
+  },
 })(Calculator);
 
 export default connect()(composedCalculator);

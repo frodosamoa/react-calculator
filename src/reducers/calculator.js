@@ -30,14 +30,12 @@ const currentInputSelector = state => state.calculator.currentInput;
 export const computationsSelector = state => state.calculator.computations;
 const operatorSelector = state => state.calculator.operator;
 const displayDecimalSelector = state => state.calculator.displayDecimal;
-const decimalPlacesSelector = state => state.calculator.decimalPlaces;
 
 export const getNumberDisplay = createSelector(
   currentInputSelector,
   displayDecimalSelector,
   (currentInput, displayDecimal) =>
-    `${currentInput.toString()}${displayDecimal ? '.' : ''}`
-  },
+    `${currentInput.toString()}${displayDecimal ? '.' : ''}`,
 );
 
 export const getOperatorDisplay = createSelector(
@@ -81,28 +79,8 @@ const compute = (state) => {
   }
 };
 
-// taken from: https://stackoverflow.com/a/27865285
-const precision = (a) => {
-  if (!Number.isFinite(a)) {
-    return 0;
-  }
-
-  let e = 1;
-  let p = 0;
-  while (Math.round(a * e) / e !== a) {
-    e *= 10;
-    p += 1;
-  }
-  return p;
-};
-
 const typeOperator = (state, action) => {
-  const {
-    operator,
-    previousInput,
-    currentInput,
-  } = state;
-
+  const { previousInput } = state;
   const noPreviousInput = previousInput === null;
 
   if (noPreviousInput) {
@@ -118,13 +96,13 @@ const typeOperator = (state, action) => {
     previousInput: null,
     currentInput: compute(state),
   };
-}
+};
 
-const equals = (state, action) => {
+const equals = (state) => {
   const {
     operator,
     currentInput,
-    computations
+    computations,
   } = state;
 
   const noOperator = operator === null;
@@ -139,7 +117,7 @@ const equals = (state, action) => {
       nextCurrentInput,
     ],
   };
-}
+};
 
 const typeNumber = (state, action) => {
   const {
@@ -164,29 +142,25 @@ const typeNumber = (state, action) => {
 
   if (displayDecimal) {
     if (!currentInput.isInteger()) {
-      const p = decimalPlaces;
-
       return {
         ...state,
         displayDecimal: false,
         currentInput: currentInput.plus(action.value / (10 ** (decimalPlaces + 1))),
       };
-    } else {
-      return {
-        ...state,
-        decimalPlaces: decimalPlaces + 1,
-      }
     }
+    return {
+      ...state,
+      decimalPlaces: decimalPlaces + 1,
+    };
   }
 
   return {
     ...state,
     currentInput: currentInput.times(10).plus(action.value),
   };
-}
+};
 
-
-const toFixed = (state, action) => {
+const toFixed = (state) => {
   const {
     operator,
     previousInput,
@@ -208,11 +182,11 @@ const toFixed = (state, action) => {
     ...state,
     displayDecimal: currentInput.isInteger(),
   };
-}
+};
 
-const clearCalculator = (state, action) => ({
+const clearCalculator = state => ({
   ...initialState,
-  computations: state.computations
+  computations: state.computations,
 });
 
 export default function calculator(state = initialState, action) {
