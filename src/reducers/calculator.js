@@ -18,24 +18,28 @@ import {
 } from '../constants';
 
 export const initialState = {
-  previousInput: null,
-  currentInput: BigNumber(0),
-  decimalPlaces: 0,
+  previousValue: null,
+  currentValue: '0',
   operator: null,
   computations: [],
-  displayDecimal: false,
 };
 
-const currentInputSelector = state => state.calculator.currentInput;
-export const computationsSelector = state => state.calculator.computations;
 const operatorSelector = state => state.calculator.operator;
-const displayDecimalSelector = state => state.calculator.displayDecimal;
+const currentInputSelector = state => state.calculator.currentValue;
+export const computationsSelector = state => state.calculator.computations;
+const lastComputationSelection = createSelector(
+  computationsSelector,
+  (computations) => computations[computations.length - 1],
+);
 
 export const getNumberDisplay = createSelector(
   currentInputSelector,
-  displayDecimalSelector,
-  (currentInput, displayDecimal) =>
-    `${currentInput.toString()}${displayDecimal ? '.' : ''}`,
+  lastComputationSelection,
+  (currentValue, lastComputation) => {
+    const numberDisplay = currentValue || lastComputation;
+
+    return `${numberDisplay.toString()}`;
+  },
 );
 
 export const getOperatorDisplay = createSelector(
@@ -47,71 +51,86 @@ export const getOperatorDisplay = createSelector(
   },
 );
 
-const compute = (state) => {
-  const {
-    operator,
-    currentInput,
-    previousInput,
-  } = state;
-
-  const firstNumber = previousInput || currentInput;
-  const secondNumber = currentInput;
-
+const compute = (operator, firstNumber, secondNumber) => {
   if (firstNumber instanceof Error) {
     return firstNumber;
   }
 
+  const firstOperand = new BigNumber(firstNumber);
+  const secondOperand = new BigNumber(secondNumber);
+
   switch (operator) {
     case ADD:
-      return firstNumber.plus(secondNumber);
+      return firstOperand.plus(secondOperand).toString();
     case SUBTRACT:
-      return firstNumber.minus(secondNumber);
+      return firstOperand.minus(secondOperand).toString();
     case MULTIPLY:
-      return firstNumber.times(secondNumber);
+      return firstOperand.times(secondOperand).toString();
     case DIVIDE:
-      if (secondNumber.equals(0)) {
+      if (secondOperand.equals(0)) {
         return new Error();
       }
 
-      return firstNumber.dividedBy(secondNumber);
+      return firstOperand.dividedBy(secondOperand).toString();
     default:
-      return firstNumber; // no operator that we recognize, return first number
+      return firstOperand; // no operator that we recognize, return first number
   }
 };
 
 const typeOperator = (state, action) => {
-  const { previousInput } = state;
-  const noPreviousInput = previousInput === null;
+  const {
+    operator,
+    previousValue,
+    currentValue,
+  } = state;
 
-  if (noPreviousInput) {
+  const inputOperator = action.operator;
+
+  if (operator) {
+    const nextCurrentValue = compute(
+      operator,
+      previousValue || 0,
+      currentValue
+    );
+
     return {
       ...state,
-      operator: action.operator,
+      operator: inputOperator,
+      previousValue: null,
+      currentValue: nextCurrentValue,
     };
   }
 
   return {
     ...state,
-    operator: action.operator,
-    previousInput: null,
-    currentInput: compute(state),
-  };
+    operator: inputOperator,
+  }
 };
 
 const equals = (state) => {
   const {
     operator,
-    currentInput,
+    currentValue,
+    previousValue,
     computations,
   } = state;
 
   const noOperator = operator === null;
-  const nextCurrentInput = noOperator ? currentInput : compute(state);
+
+  let nextCurrentInput;
+  if (noOperator) {
+    nextCurrentInput = currentValue;
+  } else {
+    nextCurrentInput = compute(
+      operator,
+      previousValue || 0,
+      currentValue,
+    );
+  }
 
   return {
-    operator: null,
-    previousInput: null,
-    currentInput: nextCurrentInput,
+    ...initialState,
+    currentValue: nextCurrentInput,
     computations: [
       ...computations,
       nextCurrentInput,
@@ -119,69 +138,79 @@ const equals = (state) => {
   };
 };
 
+
+const getNextCurrentValue = (state, action) => {
+  const { currentValue } = state;
+  const isCurrentValueZero = currentValue === "0";
+  const inputNumber = action.value;
+
+  return isCurrentValueZero ? String(inputNumber) : currentValue + inputNumber;
+}
+
 const typeNumber = (state, action) => {
   const {
+    previousValue,
+    currentValue,
     operator,
-    previousInput,
-    currentInput,
-    displayDecimal,
-    decimalPlaces,
   } = state;
 
-  const noPreviousInput = previousInput === null;
-  const noOperator = operator === null;
+  let nextCurrentValue;
+  let nextPreviousValue = null;
 
-  if (!noOperator && noPreviousInput) {
-    return {
-      ...state,
-      previousInput: currentInput,
-      displayDecimal: false,
-      currentInput: BigNumber(action.value),
-    };
-  }
-
-  if (displayDecimal) {
-    if (!currentInput.isInteger()) {
-      return {
-        ...state,
-        displayDecimal: false,
-        currentInput: currentInput.plus(action.value / (10 ** (decimalPlaces + 1))),
-      };
+  if (operator) {
+    if (previousValue) {
+      nextPreviousValue = previousValue;
+      nextCurrentValue = getNextCurrentValue(state, action);
+    } else {
+      nextPreviousValue = currentValue;
+      nextCurrentValue = String(action.value);
     }
-    return {
-      ...state,
-      decimalPlaces: decimalPlaces + 1,
-    };
+  } else {
+    nextCurrentValue = getNextCurrentValue(state, action);
   }
 
   return {
     ...state,
-    currentInput: currentInput.times(10).plus(action.value),
+    currentValue: nextCurrentValue,
+    previousValue: nextPreviousValue,
   };
 };
 
 const toFixed = (state) => {
   const {
+    currentValue,
+    previousValue,
     operator,
-    previousInput,
-    currentInput,
   } = state;
 
-  const noOperator = operator === null;
+  const isCurrentValueFloat = currentValue.match(/\./);
 
-  if (!noOperator) {
+  if (operator) {
+    if (!previousValue) {
+      return {
+        ...state,
+        previousValue: currentValue,
+        currentValue: '0.'
+      }
+    } else {
+      if (!isCurrentValueFloat) {
+        return {
+          ...state,
+          previousValue,
+          currentValue: currentValue + '.'
+        };
+      }
+    }
+  }
+
+  if (!isCurrentValueFloat) {
     return {
       ...state,
-      previousInput: previousInput || currentInput,
-      displayDecimal: true,
-      currentInput: BigNumber(0),
+      currentValue: currentValue + '.'
     };
   }
 
-  return {
-    ...state,
-    displayDecimal: currentInput.isInteger(),
-  };
+  return state;
 };
 
 const clearCalculator = state => ({
