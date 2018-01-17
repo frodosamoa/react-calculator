@@ -25,14 +25,6 @@ export const initialState = {
 };
 
 const operatorSelector = state => state.calculator.operator;
-const currentValueSelector = state => state.calculator.currentValue;
-export const computationsSelector = state => state.calculator.computations;
-
-export const getNumberDisplay = createSelector(
-  currentValueSelector,
-  currentValue => `${currentValue.toString()}`,
-);
-
 export const getOperatorDisplay = createSelector(
   operatorSelector,
   (operator) => {

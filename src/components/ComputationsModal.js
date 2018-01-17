@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
 import { closeModal, searchComputations } from '../actions';
-import { computationsSelector } from '../reducers/calculator';
 
 const ComputationsModal = ({
   isOpen,
@@ -43,7 +42,7 @@ ComputationsModal.propTypes = {
 export default connect(
   state => ({
     isOpen: state.modal.isOpen,
-    visibleComputations: computationsSelector(state).map(c => c.toString()).filter(c =>
+    visibleComputations: state.calculator.computations.map(c => c.toString()).filter(c =>
       c.includes(state.modal.query)),
     query: state.modal.query,
   }),
