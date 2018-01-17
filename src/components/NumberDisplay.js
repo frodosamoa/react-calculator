@@ -10,23 +10,23 @@ import {
   getOperatorDisplay,
 } from '../reducers/calculator';
 
-const NumberDisplay = ({ operator, numberDisplay }) => (
+const NumberDisplay = ({ operator, currentValue }) => (
   <Row className={styles.row}>
     <Col {...flexboxGridColumnWidth(1 / 12)} className={styles.numberDisplay}>
       {operator}
     </Col>
     <Col {...flexboxGridColumnWidth(11 / 12)} className={styles.numberDisplay}>
-      {numberDisplay}
+      {currentValue}
     </Col>
   </Row>
 );
 
 NumberDisplay.propTypes = {
   operator: PropTypes.string.isRequired,
-  numberDisplay: PropTypes.string.isRequired,
+  currentValue: PropTypes.string.isRequired,
 };
 
 export default connect(state => ({
-  numberDisplay: getNumberDisplay(state),
+  currentValue: state.calculator.currentValue,
   operator: getOperatorDisplay(state),
 }))(NumberDisplay);
