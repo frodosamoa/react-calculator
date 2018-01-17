@@ -25,21 +25,12 @@ export const initialState = {
 };
 
 const operatorSelector = state => state.calculator.operator;
-const currentInputSelector = state => state.calculator.currentValue;
+const currentValueSelector = state => state.calculator.currentValue;
 export const computationsSelector = state => state.calculator.computations;
-const lastComputationSelection = createSelector(
-  computationsSelector,
-  computations => computations[computations.length - 1],
-);
 
 export const getNumberDisplay = createSelector(
-  currentInputSelector,
-  lastComputationSelection,
-  (currentValue, lastComputation) => {
-    const numberDisplay = currentValue || lastComputation;
-
-    return `${numberDisplay.toString()}`;
-  },
+  currentValueSelector,
+  currentValue => `${currentValue.toString()}`,
 );
 
 export const getOperatorDisplay = createSelector(
@@ -123,7 +114,7 @@ const equals = (state) => {
   } else {
     nextCurrentValue = compute(
       operator,
-      previousValue || 0,
+      previousValue || currentValue,
       currentValue,
     );
   }
@@ -137,7 +128,6 @@ const equals = (state) => {
     ],
   };
 };
-
 
 const getNextCurrentValue = (state, action) => {
   const { currentValue } = state;
@@ -193,6 +183,7 @@ const toFixed = (state) => {
         currentValue: '0.',
       };
     }
+
     if (!isCurrentValueFloat) {
       return {
         ...state,
