@@ -22,7 +22,7 @@ NumberCell.defaultProps = {
 };
 
 NumberCell.propTypes = {
-  number: PropTypes.number.isRequired,
+  number: PropTypes.string.isRequired,
   onTypeNumber: PropTypes.func.isRequired,
   gridStyle: PropTypes.objectOf(PropTypes.number),
 };
