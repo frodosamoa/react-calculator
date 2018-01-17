@@ -7,7 +7,6 @@ import styles from './calculator.scss';
 import { flexboxGridColumnWidth } from '../utils/grid';
 import { clear, toFixed, openModal } from '../actions';
 import NumberCell from './NumberCell';
-import { numberPad } from '../constants';
 
 let TopRow = ({ onClear, onOpenModal }) => (
   <Row className={styles.row}>
@@ -23,7 +22,7 @@ let TopRow = ({ onClear, onOpenModal }) => (
       className={styles.clearCell}
       onClick={() => onOpenModal()}
     >
-      admin
+      list
     </Col>
   </Row>
 );
@@ -47,7 +46,7 @@ TopRow = connect(
 
 let BottomRow = ({ onToFixed }) => (
   <Row className={styles.row}>
-    <NumberCell number={0} gridStyle={flexboxGridColumnWidth(2 / 3)} />
+    <NumberCell number={'0'} gridStyle={flexboxGridColumnWidth(2 / 3)} />
     <Col
       className={styles.numberCell}
       {...flexboxGridColumnWidth(1 / 3)}
@@ -74,13 +73,21 @@ BottomRow = connect(
 const NumberPad = () => (
   <Col {...flexboxGridColumnWidth(3 / 4)}>
     <TopRow />
-    {numberPad.map(row => (
-      <Row key={row[0]} className={styles.row}>
-        {row.map(number => (
-          <NumberCell key={number} number={number} />
-        ))}
-      </Row>
-    ))}
+    <Row className={styles.row}>
+      <NumberCell number={'7'} />
+      <NumberCell number={'8'} />
+      <NumberCell number={'9'} />
+    </Row>
+    <Row className={styles.row}>
+      <NumberCell number={'4'} />
+      <NumberCell number={'5'} />
+      <NumberCell number={'6'} />
+    </Row>
+    <Row className={styles.row}>
+      <NumberCell number={'1'} />
+      <NumberCell number={'2'} />
+      <NumberCell number={'3'} />
+    </Row>
     <BottomRow />
   </Col>
 );

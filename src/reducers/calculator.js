@@ -117,11 +117,11 @@ const equals = (state) => {
 
   const noOperator = operator === null;
 
-  let nextCurrentInput;
+  let nextCurrentValue;
   if (noOperator) {
-    nextCurrentInput = currentValue;
+    nextCurrentValue = currentValue;
   } else {
-    nextCurrentInput = compute(
+    nextCurrentValue = compute(
       operator,
       previousValue || 0,
       currentValue,
@@ -130,10 +130,10 @@ const equals = (state) => {
 
   return {
     ...initialState,
-    currentValue: nextCurrentInput,
+    currentValue: nextCurrentValue,
     computations: [
       ...computations,
-      nextCurrentInput,
+      nextCurrentValue,
     ],
   };
 };

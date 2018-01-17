@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { batchActions } from 'redux-batched-actions';
 
 import {
@@ -40,29 +41,24 @@ const monkeysTyping = () => {
 
   const actions = [];
   let amountOfDigits;
-  let amountOfOperations = 100;
 
-  while (amountOfOperations > 0) {
+  _.times(100, (operation) => {
     amountOfDigits = random(15) + 1;
 
-    while (amountOfDigits > 0) {
+    _.times(amountOfDigits, () => {
       actions.push(typeNumber(random(9) + 1));
-      amountOfDigits -= 1;
-    }
+    });
 
-    if (amountOfOperations % 3 === 0) {
+    if (operation % 4 === 0) {
       actions.push(equals());
       actions.push(clear());
     } else {
       const randomOperator = operatorConstants[random(operatorConstants.length)];
       actions.push(typeOperator(randomOperator));
     }
+  });
 
-    amountOfOperations -= 1;
-  }
-
-  actions.push(equals());
-
+  console.log(actions)
   return batchActions(actions);
 };
 
