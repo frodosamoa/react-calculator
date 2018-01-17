@@ -58,7 +58,6 @@ const monkeysTyping = () => {
     }
   });
 
-  console.log(actions)
   return batchActions(actions);
 };
 

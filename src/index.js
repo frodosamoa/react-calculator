@@ -26,7 +26,3 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 registerServiceWorker();
-
-// TODO: add README.md
-// TODO: .00000000 adding multple zeros after input consolidate displayDecimal and decimalPlaces
-// TODO: make number fit in display
