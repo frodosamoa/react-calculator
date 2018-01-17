@@ -29,7 +29,7 @@ const currentInputSelector = state => state.calculator.currentValue;
 export const computationsSelector = state => state.calculator.computations;
 const lastComputationSelection = createSelector(
   computationsSelector,
-  (computations) => computations[computations.length - 1],
+  computations => computations[computations.length - 1],
 );
 
 export const getNumberDisplay = createSelector(
@@ -90,7 +90,7 @@ const typeOperator = (state, action) => {
     const nextCurrentValue = compute(
       operator,
       previousValue || 0,
-      currentValue
+      currentValue,
     );
 
     return {
@@ -104,7 +104,7 @@ const typeOperator = (state, action) => {
   return {
     ...state,
     operator: inputOperator,
-  }
+  };
 };
 
 const equals = (state) => {
@@ -141,11 +141,11 @@ const equals = (state) => {
 
 const getNextCurrentValue = (state, action) => {
   const { currentValue } = state;
-  const isCurrentValueZero = currentValue === "0";
+  const isCurrentValueZero = currentValue === '0';
   const inputNumber = action.value;
 
-  return isCurrentValueZero ? String(inputNumber) : currentValue + inputNumber;
-}
+  return isCurrentValueZero ? String(inputNumber) : `${currentValue}${inputNumber}`;
+};
 
 const typeNumber = (state, action) => {
   const {
@@ -190,23 +190,22 @@ const toFixed = (state) => {
       return {
         ...state,
         previousValue: currentValue,
-        currentValue: '0.'
-      }
-    } else {
-      if (!isCurrentValueFloat) {
-        return {
-          ...state,
-          previousValue,
-          currentValue: currentValue + '.'
-        };
-      }
+        currentValue: '0.',
+      };
+    }
+    if (!isCurrentValueFloat) {
+      return {
+        ...state,
+        previousValue,
+        currentValue: `${currentValue}.`,
+      };
     }
   }
 
   if (!isCurrentValueFloat) {
     return {
       ...state,
-      currentValue: currentValue + '.'
+      currentValue: `${currentValue}.`,
     };
   }
 
