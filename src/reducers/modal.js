@@ -1,3 +1,5 @@
+/* @flow */
+
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -9,7 +11,17 @@ const initialState = {
   query: ''
 };
 
-export default function modal(state = initialState, action) {
+type State = {
+  +isOpen: boolean,
+  +query: string
+};
+
+type Action = { type: string, query?: string };
+
+export default function modal(
+  state: State = initialState,
+  action: Action
+): State {
   switch (action.type) {
     case OPEN_MODAL:
       return {
