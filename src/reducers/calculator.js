@@ -6,33 +6,24 @@ import {
   CLEAR,
   TYPE_OPERATOR,
   EQUALS,
-  TO_FIXED,
+  TO_FIXED
 } from '../actions/actionTypes';
 
-import {
-  ADD,
-  SUBTRACT,
-  MULTIPLY,
-  DIVIDE,
-  operators,
-} from '../constants';
+import { ADD, SUBTRACT, MULTIPLY, DIVIDE, operators } from '../constants';
 
 export const initialState = {
   previousValue: null,
   currentValue: '0',
   operator: null,
-  computations: [],
+  computations: []
 };
 
 const operatorSelector = state => state.calculator.operator;
-export const getOperatorDisplay = createSelector(
-  operatorSelector,
-  (operator) => {
-    const opDisplay = operators.find(op => op.constant === operator);
+export const getOperatorDisplay = createSelector(operatorSelector, operator => {
+  const opDisplay = operators.find(op => op.constant === operator);
 
-    return (opDisplay && opDisplay.display) || '';
-  },
-);
+  return (opDisplay && opDisplay.display) || '';
+});
 
 const compute = (operator, firstNumber, secondNumber) => {
   if (firstNumber instanceof Error) {
@@ -61,11 +52,7 @@ const compute = (operator, firstNumber, secondNumber) => {
 };
 
 const typeOperator = (state, action) => {
-  const {
-    operator,
-    previousValue,
-    currentValue,
-  } = state;
+  const { operator, previousValue, currentValue } = state;
 
   const inputOperator = action.operator;
 
@@ -73,30 +60,25 @@ const typeOperator = (state, action) => {
     const nextCurrentValue = compute(
       operator,
       previousValue || 0,
-      currentValue,
+      currentValue
     );
 
     return {
       ...state,
       operator: inputOperator,
       previousValue: null,
-      currentValue: nextCurrentValue,
+      currentValue: nextCurrentValue
     };
   }
 
   return {
     ...state,
-    operator: inputOperator,
+    operator: inputOperator
   };
 };
 
-const equals = (state) => {
-  const {
-    operator,
-    currentValue,
-    previousValue,
-    computations,
-  } = state;
+const equals = state => {
+  const { operator, currentValue, previousValue, computations } = state;
 
   const noOperator = operator === null;
 
@@ -107,17 +89,14 @@ const equals = (state) => {
     nextCurrentValue = compute(
       operator,
       previousValue || currentValue,
-      currentValue,
+      currentValue
     );
   }
 
   return {
     ...initialState,
     currentValue: nextCurrentValue,
-    computations: [
-      ...computations,
-      nextCurrentValue,
-    ],
+    computations: [...computations, nextCurrentValue]
   };
 };
 
@@ -126,15 +105,13 @@ const getNextCurrentValue = (state, action) => {
   const isCurrentValueZero = currentValue === '0';
   const inputNumber = action.value;
 
-  return isCurrentValueZero ? String(inputNumber) : `${currentValue}${inputNumber}`;
+  return isCurrentValueZero
+    ? String(inputNumber)
+    : `${currentValue}${inputNumber}`;
 };
 
 const typeNumber = (state, action) => {
-  const {
-    previousValue,
-    currentValue,
-    operator,
-  } = state;
+  const { previousValue, currentValue, operator } = state;
 
   let nextCurrentValue;
   let nextPreviousValue = null;
@@ -154,16 +131,12 @@ const typeNumber = (state, action) => {
   return {
     ...state,
     currentValue: nextCurrentValue,
-    previousValue: nextPreviousValue,
+    previousValue: nextPreviousValue
   };
 };
 
-const toFixed = (state) => {
-  const {
-    currentValue,
-    previousValue,
-    operator,
-  } = state;
+const toFixed = state => {
+  const { currentValue, previousValue, operator } = state;
 
   const isCurrentValueFloat = currentValue.match(/\./);
 
@@ -172,7 +145,7 @@ const toFixed = (state) => {
       return {
         ...state,
         previousValue: currentValue,
-        currentValue: '0.',
+        currentValue: '0.'
       };
     }
 
@@ -180,7 +153,7 @@ const toFixed = (state) => {
       return {
         ...state,
         previousValue,
-        currentValue: `${currentValue}.`,
+        currentValue: `${currentValue}.`
       };
     }
   }
@@ -188,7 +161,7 @@ const toFixed = (state) => {
   if (!isCurrentValueFloat) {
     return {
       ...state,
-      currentValue: `${currentValue}.`,
+      currentValue: `${currentValue}.`
     };
   }
 
@@ -197,16 +170,21 @@ const toFixed = (state) => {
 
 const clearCalculator = state => ({
   ...initialState,
-  computations: state.computations,
+  computations: state.computations
 });
 
 export default function calculator(state = initialState, action) {
   switch (action.type) {
-    case TYPE_OPERATOR: return typeOperator(state, action);
-    case EQUALS: return equals(state, action);
-    case TYPE_NUMBER: return typeNumber(state, action);
-    case TO_FIXED: return toFixed(state, action);
-    case CLEAR: return clearCalculator(state, action);
+    case TYPE_OPERATOR:
+      return typeOperator(state, action);
+    case EQUALS:
+      return equals(state, action);
+    case TYPE_NUMBER:
+      return typeNumber(state, action);
+    case TO_FIXED:
+      return toFixed(state, action);
+    case CLEAR:
+      return clearCalculator(state, action);
     default:
       return state;
   }

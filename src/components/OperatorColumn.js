@@ -29,14 +29,11 @@ const OperatorColumn = ({ onEquals }) => (
 );
 
 OperatorColumn.propTypes = {
-  onEquals: PropTypes.func.isRequired,
+  onEquals: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  dispatch => ({
-    onEquals: () => {
-      dispatch(equals());
-    },
-  }),
-)(OperatorColumn);
+export default connect(null, dispatch => ({
+  onEquals: () => {
+    dispatch(equals());
+  }
+}))(OperatorColumn);

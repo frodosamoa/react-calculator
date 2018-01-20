@@ -29,20 +29,17 @@ let TopRow = ({ onClear, onOpenModal }) => (
 
 TopRow.propTypes = {
   onClear: PropTypes.func.isRequired,
-  onOpenModal: PropTypes.func.isRequired,
+  onOpenModal: PropTypes.func.isRequired
 };
 
-TopRow = connect(
-  null,
-  dispatch => ({
-    onClear: () => {
-      dispatch(clear());
-    },
-    onOpenModal: () => {
-      dispatch(openModal());
-    },
-  }),
-)(TopRow);
+TopRow = connect(null, dispatch => ({
+  onClear: () => {
+    dispatch(clear());
+  },
+  onOpenModal: () => {
+    dispatch(openModal());
+  }
+}))(TopRow);
 
 let BottomRow = ({ onToFixed }) => (
   <Row className={styles.row}>
@@ -58,17 +55,14 @@ let BottomRow = ({ onToFixed }) => (
 );
 
 BottomRow.propTypes = {
-  onToFixed: PropTypes.func.isRequired,
+  onToFixed: PropTypes.func.isRequired
 };
 
-BottomRow = connect(
-  null,
-  dispatch => ({
-    onToFixed: () => {
-      dispatch(toFixed());
-    },
-  }),
-)(BottomRow);
+BottomRow = connect(null, dispatch => ({
+  onToFixed: () => {
+    dispatch(toFixed());
+  }
+}))(BottomRow);
 
 const NumberPad = () => (
   <Col {...flexboxGridColumnWidth(3 / 4)}>

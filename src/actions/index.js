@@ -9,7 +9,7 @@ import {
   TO_FIXED,
   OPEN_MODAL,
   CLOSE_MODAL,
-  SEARCH_COMPUTATIONS,
+  SEARCH_COMPUTATIONS
 } from './actionTypes';
 
 import { operators } from '../constants';
@@ -23,7 +23,6 @@ const makeActionCreator = (type, ...argNames) =>
     return action;
   };
 
-
 export const clear = makeActionCreator(CLEAR);
 export const equals = makeActionCreator(EQUALS);
 export const toFixed = makeActionCreator(TO_FIXED);
@@ -32,7 +31,10 @@ export const closeModal = makeActionCreator(CLOSE_MODAL);
 
 export const typeNumber = makeActionCreator(TYPE_NUMBER, 'value');
 export const typeOperator = makeActionCreator(TYPE_OPERATOR, 'operator');
-export const searchComputations = makeActionCreator(SEARCH_COMPUTATIONS, 'query');
+export const searchComputations = makeActionCreator(
+  SEARCH_COMPUTATIONS,
+  'query'
+);
 
 const random = int => Math.floor(Math.random() * int);
 
@@ -42,7 +44,7 @@ const monkeysTyping = () => {
   const actions = [];
   let amountOfDigits;
 
-  _.times(100, (operation) => {
+  _.times(100, operation => {
     amountOfDigits = random(15) + 1;
 
     _.times(amountOfDigits, () => {
@@ -53,7 +55,8 @@ const monkeysTyping = () => {
       actions.push(equals());
       actions.push(clear());
     } else {
-      const randomOperator = operatorConstants[random(operatorConstants.length)];
+      const randomOperator =
+        operatorConstants[random(operatorConstants.length)];
       actions.push(typeOperator(randomOperator));
     }
   });
@@ -77,7 +80,7 @@ export const listenToWindowEvent = (name, mapEventToAction) =>
     return () => window.removeEventListener(name, handleEvent);
   };
 
-export const globalKeyPress = (e) => {
+export const globalKeyPress = e => {
   switch (e.key) {
     case '0':
     case '1':
@@ -110,7 +113,7 @@ export const globalKeyPress = (e) => {
     default:
       return {
         type: 'GLOBAL_KEY_PRESS',
-        key: e.key,
+        key: e.key
       };
   }
 };

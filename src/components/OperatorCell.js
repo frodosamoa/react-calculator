@@ -19,14 +19,11 @@ const OperatorCell = ({ display, onTypeOperator }) => (
 
 OperatorCell.propTypes = {
   display: PropTypes.string.isRequired,
-  onTypeOperator: PropTypes.func.isRequired,
+  onTypeOperator: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  (dispatch, ownProps) => ({
-    onTypeOperator: () => {
-      dispatch(typeOperator(ownProps.constant));
-    },
-  }),
-)(OperatorCell);
+export default connect(null, (dispatch, ownProps) => ({
+  onTypeOperator: () => {
+    dispatch(typeOperator(ownProps.constant));
+  }
+}))(OperatorCell);

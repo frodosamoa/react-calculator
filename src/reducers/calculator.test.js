@@ -1,17 +1,8 @@
 import calculator, { initialState } from './calculator';
 
-import {
-  clear,
-  typeNumber,
-  toFixed,
-  equals,
-  typeOperator
-} from '../actions';
+import { clear, typeNumber, toFixed, equals, typeOperator } from '../actions';
 
-import {
-  MULTIPLY,
-  ADD,
-} from '../constants';
+import { MULTIPLY, ADD } from '../constants';
 
 describe('calculator reducer', () => {
   it('should return the initial state', () => {
@@ -23,7 +14,7 @@ describe('calculator reducer', () => {
       previousValue: '12344567',
       currentValue: '980759234',
       computations: ['6453', '5432134', '43', '234342'],
-      operator: MULTIPLY,
+      operator: MULTIPLY
     };
 
     const nextState = calculator(firstState, clear());
@@ -40,11 +31,11 @@ describe('calculator reducer', () => {
       expect(calculator(undefined, typeNumber('5')).currentValue).toEqual('5');
     });
 
-    it('doesn\'t add unnecessary zeroes', () => {
+    it("doesn't add unnecessary zeroes", () => {
       expect(calculator(undefined, typeNumber('0')).currentValue).toEqual('0');
     });
 
-    it('doesn\'t add unnecessary zeroes', () => {
+    it("doesn't add unnecessary zeroes", () => {
       expect(calculator(undefined, typeNumber('0')).currentValue).toEqual('0');
     });
 
@@ -62,7 +53,7 @@ describe('calculator reducer', () => {
         const firstState = {
           previousValue: '500',
           currentValue: '300',
-          operator: ADD,
+          operator: ADD
         };
         const nextState = calculator(firstState, typeNumber('5'));
 
@@ -70,11 +61,11 @@ describe('calculator reducer', () => {
         expect(nextState.currentValue).toEqual(`${firstState.currentValue}5`);
       });
 
-      it('when we have a previousValue, keep the previousValue but doesn\'t add 0 to the current number', () => {
+      it("when we have a previousValue, keep the previousValue but doesn't add 0 to the current number", () => {
         const firstState = {
           previousValue: '500',
           currentValue: '0',
-          operator: ADD,
+          operator: ADD
         };
         const nextState = calculator(firstState, typeNumber('0'));
 
@@ -86,7 +77,7 @@ describe('calculator reducer', () => {
         const firstState = {
           previousValue: null,
           currentValue: '300',
-          operator: ADD,
+          operator: ADD
         };
         const nextState = calculator(firstState, typeNumber('5'));
 
@@ -101,7 +92,7 @@ describe('calculator reducer', () => {
       expect(calculator(undefined, toFixed()).currentValue).toEqual('0.');
     });
 
-    it('doesn\'t add unnecessary zeroes', () => {
+    it("doesn't add unnecessary zeroes", () => {
       const firstState = {
         currentValue: '444'
       };
@@ -111,7 +102,7 @@ describe('calculator reducer', () => {
       expect(nextState.currentValue).toEqual(expectedCurrentValue);
     });
 
-    it('doesn\'t add . when there is one present', () => {
+    it("doesn't add . when there is one present", () => {
       const currentValue = '444.';
       const nextState = calculator({ currentValue }, toFixed());
       expect(nextState.currentValue).toEqual(currentValue);
@@ -129,7 +120,6 @@ describe('calculator reducer', () => {
         expect(nextState.previousValue).toEqual(firstState.currentValue);
         expect(nextState.currentValue).toEqual('0.');
       });
-
 
       it('when we have a previousValue, adds a . to the end of the currentValue', () => {
         const firstState = {
@@ -151,7 +141,7 @@ describe('calculator reducer', () => {
         ...initialState,
         currentValue: '300',
         previousValue: '400',
-        operator: ADD,
+        operator: ADD
       };
       const nextState = calculator(firstState, equals());
       const { computations } = nextState;
@@ -164,7 +154,7 @@ describe('calculator reducer', () => {
     it('when we have no operator and no previousValue, adds the currentValue to the computations array', () => {
       const firstState = {
         ...initialState,
-        currentValue: '300',
+        currentValue: '300'
       };
       const nextState = calculator(firstState, equals());
       const { computations } = nextState;
@@ -179,7 +169,7 @@ describe('calculator reducer', () => {
         const firstState = {
           ...initialState,
           currentValue: '300',
-          operator: ADD,
+          operator: ADD
         };
         const nextState = calculator(firstState, equals());
 
@@ -196,7 +186,7 @@ describe('calculator reducer', () => {
           ...initialState,
           currentValue: '300',
           previousValue: '400',
-          operator: ADD,
+          operator: ADD
         };
         const nextState = calculator(firstState, equals());
         const { computations } = nextState;
@@ -216,7 +206,7 @@ describe('calculator reducer', () => {
       expect(nextState.operator).toEqual(ADD);
     });
 
-    it('when we an operator, performs the operation but doesn\'t add to computations', () => {
+    it("when we an operator, performs the operation but doesn't add to computations", () => {
       const firstState = {
         ...initialState,
         currentValue: '300',
@@ -228,7 +218,9 @@ describe('calculator reducer', () => {
       const expectedCurrentValue = String(500);
 
       expect(nextState.currentValue).toEqual(expectedCurrentValue);
-      expect(firstState.computations.length).toEqual(nextState.computations.length);
+      expect(firstState.computations.length).toEqual(
+        nextState.computations.length
+      );
       expect(nextState.operator).toEqual(MULTIPLY);
     });
   });

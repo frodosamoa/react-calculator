@@ -24,11 +24,13 @@ const Calculator = () => (
 const composedCalculator = lifecycle({
   componentDidMount() {
     const { dispatch } = this.props;
-    this.unlistenKeyPress = dispatch(listenToWindowEvent('keypress', globalKeyPress));
+    this.unlistenKeyPress = dispatch(
+      listenToWindowEvent('keypress', globalKeyPress)
+    );
   },
   componentWillUnmount() {
     this.unlistenKeyPress();
-  },
+  }
 })(Calculator);
 
 export default connect()(composedCalculator);

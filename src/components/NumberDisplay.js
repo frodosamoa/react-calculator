@@ -5,10 +5,7 @@ import { Row, Col } from 'react-flexbox-grid';
 
 import styles from './calculator.scss';
 import { flexboxGridColumnWidth } from '../utils/grid';
-import {
-  getNumberDisplay,
-  getOperatorDisplay,
-} from '../reducers/calculator';
+import { getOperatorDisplay } from '../reducers/calculator';
 
 const NumberDisplay = ({ operator, currentValue }) => (
   <Row className={styles.row}>
@@ -23,10 +20,10 @@ const NumberDisplay = ({ operator, currentValue }) => (
 
 NumberDisplay.propTypes = {
   operator: PropTypes.string.isRequired,
-  currentValue: PropTypes.string.isRequired,
+  currentValue: PropTypes.string.isRequired
 };
 
 export default connect(state => ({
   currentValue: state.calculator.currentValue,
-  operator: getOperatorDisplay(state),
+  operator: getOperatorDisplay(state)
 }))(NumberDisplay);

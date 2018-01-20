@@ -10,15 +10,12 @@ import reducers from './reducers';
 import Calculator from './components/Calculator';
 import registerServiceWorker from './registerServiceWorker';
 
-const store = createStore(
-  enableBatching(reducers),
-  applyMiddleware(thunk),
-);
+const store = createStore(enableBatching(reducers), applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
     <Calculator />
   </Provider>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
 registerServiceWorker();

@@ -18,20 +18,17 @@ const NumberCell = ({ number, onTypeNumber, gridStyle }) => (
 );
 
 NumberCell.defaultProps = {
-  gridStyle: flexboxGridColumnWidth(1 / 3),
+  gridStyle: flexboxGridColumnWidth(1 / 3)
 };
 
 NumberCell.propTypes = {
   number: PropTypes.string.isRequired,
   onTypeNumber: PropTypes.func.isRequired,
-  gridStyle: PropTypes.objectOf(PropTypes.number),
+  gridStyle: PropTypes.objectOf(PropTypes.number)
 };
 
-export default connect(
-  null,
-  dispatch => ({
-    onTypeNumber: (value) => {
-      dispatch(typeNumber(value));
-    },
-  }),
-)(NumberCell);
+export default connect(null, dispatch => ({
+  onTypeNumber: value => {
+    dispatch(typeNumber(value));
+  }
+}))(NumberCell);

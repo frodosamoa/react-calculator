@@ -7,21 +7,21 @@ export const operators = [
   {
     key: '/',
     display: '÷',
-    constant: DIVIDE,
+    constant: DIVIDE
   },
   {
     key: '*',
     display: 'x',
-    constant: MULTIPLY,
+    constant: MULTIPLY
   },
   {
     key: '-',
     display: '–',
-    constant: SUBTRACT,
+    constant: SUBTRACT
   },
   {
     key: '+',
     display: '+',
-    constant: ADD,
-  },
+    constant: ADD
+  }
 ];
