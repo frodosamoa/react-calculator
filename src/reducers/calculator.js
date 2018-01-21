@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { createSelector } from 'reselect';
+import { handleActions } from 'redux-actions';
 
 import {
   TYPE_NUMBER,
@@ -52,9 +53,10 @@ const compute = (operator, firstNumber, secondNumber) => {
 };
 
 const typeOperator = (state, action) => {
+  console.log(action);
   const { operator, previousValue, currentValue } = state;
 
-  const inputOperator = action.operator;
+  const inputOperator = action.payload.operator;
 
   if (operator) {
     const nextCurrentValue = compute(
@@ -103,7 +105,7 @@ const equals = state => {
 const getNextCurrentValue = (state, action) => {
   const { currentValue } = state;
   const isCurrentValueZero = currentValue === '0';
-  const inputNumber = action.value;
+  const inputNumber = action.payload.value;
 
   return isCurrentValueZero
     ? String(inputNumber)
@@ -122,7 +124,7 @@ const typeNumber = (state, action) => {
       nextCurrentValue = getNextCurrentValue(state, action);
     } else {
       nextPreviousValue = currentValue;
-      nextCurrentValue = String(action.value);
+      nextCurrentValue = String(action.payload.value);
     }
   } else {
     nextCurrentValue = getNextCurrentValue(state, action);
@@ -173,19 +175,13 @@ const clearCalculator = state => ({
   computations: state.computations
 });
 
-export default function calculator(state = initialState, action) {
-  switch (action.type) {
-    case TYPE_OPERATOR:
-      return typeOperator(state, action);
-    case EQUALS:
-      return equals(state, action);
-    case TYPE_NUMBER:
-      return typeNumber(state, action);
-    case TO_FIXED:
-      return toFixed(state, action);
-    case CLEAR:
-      return clearCalculator(state, action);
-    default:
-      return state;
-  }
-}
+export default handleActions(
+  {
+    [TYPE_OPERATOR]: (state, action) => typeOperator(state, action),
+    [EQUALS]: (state, action) => equals(state, action),
+    [TYPE_NUMBER]: (state, action) => typeNumber(state, action),
+    [TO_FIXED]: (state, action) => toFixed(state, action),
+    [CLEAR]: (state, action) => clearCalculator(state, action)
+  },
+  initialState
+);

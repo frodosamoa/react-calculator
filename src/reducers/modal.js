@@ -1,4 +1,4 @@
-/* @flow */
+import { handleActions } from 'redux-actions';
 
 import {
   OPEN_MODAL,
@@ -11,34 +11,20 @@ const initialState = {
   query: ''
 };
 
-type State = {
-  +isOpen: boolean,
-  +query: string
-};
-
-type Action = { type: string, query?: string };
-
-export default function modal(
-  state: State = initialState,
-  action: Action
-): State {
-  switch (action.type) {
-    case OPEN_MODAL:
-      return {
-        ...state,
-        isOpen: true
-      };
-    case CLOSE_MODAL:
-      return {
-        ...state,
-        isOpen: false
-      };
-    case SEARCH_COMPUTATIONS:
-      return {
-        ...state,
-        query: action.query
-      };
-    default:
-      return state;
-  }
-}
+export default handleActions(
+  {
+    [OPEN_MODAL]: state => ({
+      ...state,
+      isOpen: true
+    }),
+    [CLOSE_MODAL]: state => ({
+      ...state,
+      isOpen: false
+    }),
+    [SEARCH_COMPUTATIONS]: (state, action) => ({
+      ...state,
+      query: action.query
+    })
+  },
+  initialState
+);

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { batchActions } from 'redux-batched-actions';
+import { createAction } from 'redux-actions';
 
 import {
   CLEAR,
@@ -14,27 +15,19 @@ import {
 
 import { operators } from '../constants';
 
-const makeActionCreator = (type, ...argNames) =>
-  function actionCreator(...args) {
-    const action = { type };
-    argNames.forEach((arg, index) => {
-      action[argNames[index]] = args[index];
-    });
-    return action;
-  };
+export const clear = createAction(CLEAR);
+export const equals = createAction(EQUALS);
+export const toFixed = createAction(TO_FIXED);
+export const openModal = createAction(OPEN_MODAL);
+export const closeModal = createAction(CLOSE_MODAL);
 
-export const clear = makeActionCreator(CLEAR);
-export const equals = makeActionCreator(EQUALS);
-export const toFixed = makeActionCreator(TO_FIXED);
-export const openModal = makeActionCreator(OPEN_MODAL);
-export const closeModal = makeActionCreator(CLOSE_MODAL);
-
-export const typeNumber = makeActionCreator(TYPE_NUMBER, 'value');
-export const typeOperator = makeActionCreator(TYPE_OPERATOR, 'operator');
-export const searchComputations = makeActionCreator(
-  SEARCH_COMPUTATIONS,
-  'query'
-);
+export const typeNumber = createAction(TYPE_NUMBER, value => ({ value }));
+export const typeOperator = createAction(TYPE_OPERATOR, operator => ({
+  operator
+}));
+export const searchComputations = createAction(SEARCH_COMPUTATIONS, query => ({
+  query
+}));
 
 const random = int => Math.floor(Math.random() * int);
 
