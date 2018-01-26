@@ -9,7 +9,6 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-flexbox-grid": "^2.0.0",
-    "react-modal": "^3.1.10",
     "react-redux": "^5.0.6",
     "react-scale-text": "^1.2.2",
     "recompose": "^0.26.0",
