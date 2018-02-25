@@ -1,8 +1,7 @@
 $number-display-color: #202020;
-$number-cell-color: #CFD0D3;
-$admin-cell-color: #B1B3B5;
-$operator-cell-color: #F78128;
-
+$number-cell-color: #cfd0d3;
+$admin-cell-color: #b1b3b5;
+$operator-cell-color: #f78128;
 
 @mixin calculatorCell($color, $align: center) {
   display: flex;
@@ -41,6 +40,10 @@ $operator-cell-color: #F78128;
   @include calculatorCell($operator-cell-color);
 
   color: white;
+}
+
+.activeOperator {
+  background: darken($operator-cell-color, 8%);
 }
 
 .numberDisplay {

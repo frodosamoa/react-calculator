@@ -1,17 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Row, Col } from 'react-flexbox-grid';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { Row, Col } from 'react-flexbox-grid'
 
-import styles from './calculator.scss';
-import { flexboxGridColumnWidth } from '../utils/grid';
-import { operators } from '../constants';
-import { equals } from '../actions';
-import OperatorCell from './OperatorCell';
+import styles from './calculator.scss'
+import { flexboxGridColumnWidth } from '../utils/grid'
+import { operators } from '../constants'
+import { equals } from '../actions'
+import OperatorCell from './OperatorCell'
 
 const OperatorColumn = ({ onEquals }) => (
   <Col {...flexboxGridColumnWidth(1 / 4)}>
-    {operators.map(operator => (
+    {operators.slice(0, 4).map(operator => (
       <Row key={operator.constant} className={styles.row}>
         <OperatorCell {...operator} />
       </Row>
@@ -26,14 +26,14 @@ const OperatorColumn = ({ onEquals }) => (
       </Col>
     </Row>
   </Col>
-);
+)
 
 OperatorColumn.propTypes = {
-  onEquals: PropTypes.func.isRequired
-};
+  onEquals: PropTypes.func.isRequired,
+}
 
 export default connect(null, dispatch => ({
   onEquals: () => {
-    dispatch(equals());
-  }
-}))(OperatorColumn);
+    dispatch(equals())
+  },
+}))(OperatorColumn)

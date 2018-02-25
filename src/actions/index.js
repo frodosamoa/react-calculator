@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { batchActions } from 'redux-batched-actions';
-import { createAction } from 'redux-actions';
+import _ from 'lodash'
+import { batchActions } from 'redux-batched-actions'
+import { createAction } from 'redux-actions'
 
 import {
   CLEAR,
@@ -10,68 +10,59 @@ import {
   TO_FIXED,
   OPEN_MODAL,
   CLOSE_MODAL,
-  SEARCH_COMPUTATIONS
-} from './actionTypes';
+} from './actionTypes'
 
-import { operators } from '../constants';
+import { operators } from '../constants'
 
-export const clear = createAction(CLEAR);
-export const equals = createAction(EQUALS);
-export const toFixed = createAction(TO_FIXED);
-export const openModal = createAction(OPEN_MODAL);
-export const closeModal = createAction(CLOSE_MODAL);
+export const clear = createAction(CLEAR)
+export const equals = createAction(EQUALS)
+export const toFixed = createAction(TO_FIXED)
+export const openModal = createAction(OPEN_MODAL)
+export const closeModal = createAction(CLOSE_MODAL)
 
-export const typeNumber = createAction(TYPE_NUMBER, value => ({ value }));
+export const typeNumber = createAction(TYPE_NUMBER, value => ({ value }))
 export const typeOperator = createAction(TYPE_OPERATOR, operator => ({
-  operator
-}));
-export const searchComputations = createAction(SEARCH_COMPUTATIONS, query => ({
-  query
-}));
+  operator,
+}))
 
-const random = int => Math.floor(Math.random() * int);
+const random = int => Math.floor(Math.random() * int)
 
 const monkeysTyping = () => {
-  const operatorConstants = operators.map(op => op.constant);
+  const operatorConstants = operators.map(op => op.constant)
 
-  const actions = [];
-  let amountOfDigits;
+  const actions = []
+  let amountOfDigits
 
   _.times(100, operation => {
-    amountOfDigits = random(15) + 1;
+    amountOfDigits = random(15) + 1
 
     _.times(amountOfDigits, () => {
-      actions.push(typeNumber(random(9) + 1));
-    });
+      actions.push(typeNumber(random(9) + 1))
+    })
 
     if (operation % 4 === 0) {
-      actions.push(equals());
-      actions.push(clear());
+      actions.push(equals())
+      actions.push(clear())
     } else {
-      const randomOperator =
-        operatorConstants[random(operatorConstants.length)];
-      actions.push(typeOperator(randomOperator));
+      const randomOperator = operatorConstants[random(operatorConstants.length)]
+      actions.push(typeOperator(randomOperator))
     }
-  });
+  })
 
-  return batchActions(actions);
-};
+  return batchActions(actions)
+}
 
 // following action taken from link below, but modified for my use case:
 // https://github.com/reactjs/redux/issues/787
 export const listenToWindowEvent = (name, mapEventToAction) =>
-  function thunk(dispatch, getState) {
+  function thunk(dispatch) {
     function handleEvent(e) {
-      const isModalOpen = getState().modal.isOpen;
-
-      if (!isModalOpen) {
-        dispatch(mapEventToAction(e));
-      }
+      dispatch(mapEventToAction(e))
     }
 
-    window.addEventListener(name, handleEvent);
-    return () => window.removeEventListener(name, handleEvent);
-  };
+    window.addEventListener(name, handleEvent)
+    return () => window.removeEventListener(name, handleEvent)
+  }
 
 export const globalKeyPress = e => {
   switch (e.key) {
@@ -85,28 +76,28 @@ export const globalKeyPress = e => {
     case '7':
     case '8':
     case '9':
-      return typeNumber(Number(e.key));
+      return typeNumber(Number(e.key))
     case '+':
     case '-':
     case '*':
     case '/': {
-      const operator = operators.find(op => op.key === e.key);
-      return typeOperator(operator.constant);
+      const operator = operators.find(op => op.key === e.key)
+      return typeOperator(operator.constant)
     }
     case '=':
     case 'Enter':
-      return equals();
+      return equals()
     case '.':
-      return toFixed();
+      return toFixed()
     case 'c':
     case 'C':
-      return clear();
+      return clear()
     case ' ':
-      return monkeysTyping();
+      return monkeysTyping()
     default:
       return {
         type: 'GLOBAL_KEY_PRESS',
-        key: e.key
-      };
+        key: e.key,
+      }
   }
-};
+}

@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Col } from 'react-flexbox-grid';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { Col } from 'react-flexbox-grid'
 
-import styles from './calculator.scss';
-import { typeNumber } from '../actions';
-import { flexboxGridColumnWidth } from '../utils/grid';
+import styles from './calculator.scss'
+import { typeNumber } from '../actions'
+import { flexboxGridColumnWidth } from '../utils/grid'
 
 const NumberCell = ({ number, onTypeNumber, gridStyle }) => (
   <Col
@@ -15,20 +15,20 @@ const NumberCell = ({ number, onTypeNumber, gridStyle }) => (
   >
     {number}
   </Col>
-);
+)
 
 NumberCell.defaultProps = {
-  gridStyle: flexboxGridColumnWidth(1 / 3)
-};
+  gridStyle: flexboxGridColumnWidth(1 / 3),
+}
 
 NumberCell.propTypes = {
   number: PropTypes.string.isRequired,
   onTypeNumber: PropTypes.func.isRequired,
-  gridStyle: PropTypes.objectOf(PropTypes.number)
-};
+  gridStyle: PropTypes.objectOf(PropTypes.number),
+}
 
 export default connect(null, dispatch => ({
   onTypeNumber: value => {
-    dispatch(typeNumber(value));
-  }
-}))(NumberCell);
+    dispatch(typeNumber(value))
+  },
+}))(NumberCell)

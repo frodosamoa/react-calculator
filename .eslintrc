@@ -1,5 +1,9 @@
 {
   "extends": "airbnb",
+  "parser": "babel-eslint",
+  "plugins": [
+    "flowtype"
+  ],
   "globals": {
     "describe": false,
     "it": false,
@@ -8,7 +12,6 @@
     "window": false
   },
   "rules": {
-    "comma-dangle": 0,
     "arrow-parens": 0,
     "function-paren-newline": 0,
 

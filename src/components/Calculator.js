@@ -1,13 +1,13 @@
-import React from 'react';
-import { Grid, Row } from 'react-flexbox-grid';
-import { lifecycle } from 'recompose';
-import { connect } from 'react-redux';
+import React from 'react'
+import { Grid, Row } from 'react-flexbox-grid'
+import { lifecycle } from 'recompose'
+import { connect } from 'react-redux'
 
-import { globalKeyPress, listenToWindowEvent } from '../actions';
+import { globalKeyPress, listenToWindowEvent } from '../actions'
 
-import NumberDisplay from './NumberDisplay';
-import NumberPad from './NumberPad';
-import OperatorColumn from './OperatorColumn';
+import NumberDisplay from './NumberDisplay'
+import NumberPad from './NumberPad'
+import OperatorColumn from './OperatorColumn'
 
 const Calculator = () => (
   <Grid fluid style={{ paddingLeft: 8, paddingRight: 8 }}>
@@ -17,18 +17,18 @@ const Calculator = () => (
       <OperatorColumn />
     </Row>
   </Grid>
-);
+)
 
 const composedCalculator = lifecycle({
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     this.unlistenKeyPress = dispatch(
-      listenToWindowEvent('keypress', globalKeyPress)
-    );
+      listenToWindowEvent('keypress', globalKeyPress),
+    )
   },
   componentWillUnmount() {
-    this.unlistenKeyPress();
-  }
-})(Calculator);
+    this.unlistenKeyPress()
+  },
+})(Calculator)
 
-export default connect()(composedCalculator);
+export default connect()(composedCalculator)
